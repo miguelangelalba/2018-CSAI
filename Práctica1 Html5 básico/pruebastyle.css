@@ -1,10 +1,28 @@
-
+#Imagen_Fondo{
+    position: absolute; top: 0; left: 0; width: 100%; z-index: -1
+}
+.contenedor{
+    display: flex;
+    width: 300px;
+    height: 40px;
+    color: white ;
+    font-size: 40px;
+    line-height: 40px;
+    position: absolute;
+    margin: auto;
+    overflow: hidden;
+}
+ul{
+    list-style: none;
+    padding-left: 10px;
+    animation: cambiar 7s infinite;
+}
 body {
-    background-color: white;
+    background-color: green;
     width:100%;
 }
 h1 {
-    color: green;
+    color: white;
     text-align: center;
 }
 .Tabla_Titulo th{
@@ -16,22 +34,20 @@ h1 {
 }
 .Tabla table{
     margin: 0 auto;
+    color: #7B7D7D;
     width:100%;
+
 
 }
 .Tabla td {
-    color: green;
+    color: #ECF0F1;
     text-align: left;
 
 }
-
 .Tabla th {
-    background-color: #4CAF50;
     color: white;
-    text-align: center;
-
+    text-align: left;
 }
-
 #MiFoto {
     width: 100px;
     height: 100px;
