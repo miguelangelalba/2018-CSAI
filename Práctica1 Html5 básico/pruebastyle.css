@@ -1,28 +1,41 @@
-#Imagen_Fondo{
-    position: absolute; top: 0; left: 0; width: 100%; z-index: -1
+
+body {
+    background-image: url(texturagrs.jpg);
+    background-size: 100% 100%;
+    background-attachment: fixed;
+
 }
+
 .contenedor{
     display: flex;
-    width: 300px;
+    width: 800px;
     height: 40px;
-    color: white ;
-    font-size: 40px;
+    font-size: 20px;
     line-height: 40px;
-    position: absolute;
-    margin: auto;
     overflow: hidden;
+
 }
-ul{
+#ulcontenedor{
     list-style: none;
     padding-left: 10px;
     animation: cambiar 7s infinite;
 }
-body {
-    background-color: green;
-    width:100%;
+#ulcontenedor, p{
+    margin-top: 0;
+    margin = 0;
 }
+@keyframes cambiar {
+    0%{margin-top: 0px;}
+    15%{margin-top: -40px;}
+    30%{margin-top: -80px;}
+    45%{margin-top: -120px;}
+    60%{margin-top: -160px;}
+    75%{margin-top: -200px;}
+    100%{margin-top: 0px;}
+}
+
 h1 {
-    color: white;
+    color: #2E86C1;
     text-align: center;
 }
 .Tabla_Titulo th{
@@ -34,22 +47,30 @@ h1 {
 }
 .Tabla table{
     margin: 0 auto;
-    color: #7B7D7D;
     width:100%;
 
 
 }
 .Tabla td {
-    color: #ECF0F1;
-    text-align: left;
+    color: black;
+    text-align: center;
 
 }
 .Tabla th {
     color: white;
-    text-align: left;
+    text-align: center;
+    background-color: #2E86C1;
 }
 #MiFoto {
     width: 100px;
     height: 100px;
     float:center;
+}
+.Tabla li{
+    text-align: left;
+    padding-left: 10px;
+    line-height: 20px;
+}
+.tabla ul{
+    text-align: left;
 }
