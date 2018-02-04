@@ -50,6 +50,7 @@ h1 {
     width:100%;
 
 
+
 }
 .Tabla td {
     color: black;
@@ -57,6 +58,7 @@ h1 {
 
 }
 .Tabla th {
+
     color: white;
     text-align: center;
     background-color: #2E86C1;
@@ -71,6 +73,6 @@ h1 {
     padding-left: 10px;
     line-height: 20px;
 }
-.tabla ul{
+.Tabla ul{
     text-align: left;
 }
