@@ -2,11 +2,15 @@
 body {
     text-align: center;
     font-family: Verdana, sans-serif;
+    background-image: url(Images/fondo.jpg);
 }
-img{vertical-align: middle;}
+img{
+    vertical-align: middle;
+    cursor: pointer;
+}
 
 canvas {
-    background-color: whait;
+    background-color: white;
     align: center;
     width: 800px;
     height: 400px;
@@ -22,12 +26,21 @@ canvas {
     width: 200px;
     height: 100px;
 }
+.myImages-col img{
+    width: 200px;
+    height: 100px;
+}
+
 .carrouselContainer{
 
     position: relative;
     margin: auto;
 }
+.carrouselContainer2{
 
+    position: relative;
+    margin: auto;
+}
 /*Caption Text */
 .text {
   color: #f2f2f2;
@@ -44,7 +57,7 @@ canvas {
   font-size: 12px;
   padding: 8px 12px;
   position: absolute;
-  left: 200px;
+  text-align: left;
   top: 0;
 }
 

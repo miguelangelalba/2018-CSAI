@@ -10,7 +10,12 @@ function matrizImagen(){
     matrix.x = 0.0;
     matirx.y = 0.0;
 }
-function recortarImagen(image){
+function recortarImagen(src){
+    var myVar = setInterval(prinTime,1000);
+
+    var myVar = setInterval(prinTime,1000);
+    var image = new Image();
+    image.src = src;
     ctx.drawImage(image,0,0,200,200);
     ctx.clearRect(0,0,50,50);
     //ctx.drawImage(image,0,0,canvas.width,canvas.height);
@@ -32,20 +37,16 @@ function showSlides(){
     }
     slides[slideIndex-1].style.display = "block";
     dots[slideIndex-1].className += " active";
-    setTimeout(showSlides, 2000); // Change image every 2 seconds
-
+    setTimeout(showSlides, 4000); // Change image every 2 seconds
 }
 
 function main(){
 var canvas = document.getElementById('canvas');
 ctx = canvas.getContext("2d");
 showSlides();
-var arrayImages = ["tesla","cohete","praga"];
-var myVar = setInterval(prinTime,1000);
+//var myVar = setInterval(prinTime,1000);
 
-var image = new Image();
-image.src = "Images/cohete.jpg";
-recortarImagen(image);
-
-
+//var image = new Image();
+//image.src = "Images/cohete.jpg";
+//recortarImagen(image);
 }
