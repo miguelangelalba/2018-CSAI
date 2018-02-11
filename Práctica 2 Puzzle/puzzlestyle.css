@@ -12,11 +12,15 @@ canvas {
     height: 400px;
     border: 1px solid #d3d3d3;;
 }
+.Tabla{
+    margin: 0 auto;
+    width:100%;
+}
 .myImages{display: none;}
 
 .myImages img{
-    width: 600px;
-    height: 300px;
+    width: 200px;
+    height: 100px;
 }
 .carrouselContainer{
 
