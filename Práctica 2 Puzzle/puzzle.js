@@ -1,3 +1,4 @@
+var slideIndex = 0
 function prinTime(){
     var d = new Date();
     document.getElementById('time').innerHTML = "Time:" + d.toLocaleTimeString();
@@ -17,16 +18,34 @@ function recortarImagen(image){
     var recorteImagen = ctx.getImageData(0,0,133.3,133.3);
     ctx.putImageData(recorteImagen,100,100);
 }
+function showSlides(){
+    var i;
+    var slides = document.getElementsByClassName("myImages");
+    var dots = document.getElementsByClassName("dot");
+    for (i = 0; i < slides.length; i++) {
+       slides[i].style.display = "none";
+    }
+    slideIndex++;
+    if (slideIndex > slides.length) {slideIndex = 1}
+    for (i = 0; i < dots.length; i++) {
+        dots[i].className = dots[i].className.replace(" active", "");
+    }
+    slides[slideIndex-1].style.display = "block";
+    dots[slideIndex-1].className += " active";
+    setTimeout(showSlides, 2000); // Change image every 2 seconds
+
+}
 
 function main(){
 var canvas = document.getElementById('canvas');
 ctx = canvas.getContext("2d");
-
+showSlides();
 var arrayImages = ["tesla","cohete","praga"];
 var myVar = setInterval(prinTime,1000);
 
 var image = new Image();
 image.src = "Images/cohete.jpg";
 recortarImagen(image);
+
 
 }
