@@ -16,9 +16,9 @@
 </div>
 
 <div class="w3-content">
-  <img class="mySlides" src="Images/tesla.jpg" >
-  <img class="mySlides" src="Images/cohete.jpg">
-  <img class="mySlides" src="Images/praga.jpg">
+  <img class="myImages" src="Images/tesla.jpg" >
+  <img class="myImages" src="Images/cohete.jpg">
+  <img class="myImages" src="Images/praga.jpg">
 
   <div class="w3-row-padding w3-section ">
     <div class="w3-col s4">
@@ -47,7 +47,7 @@ function currentDiv(n) {
 
 function showDivs(n) {
   var i;
-  var x = document.getElementsByClassName("mySlides");
+  var x = document.getElementsByClassName("myImages");
   var dots = document.getElementsByClassName("demo");
   if (n > x.length) {slideIndex = 1}
   if (n < 1) {slideIndex = x.length}

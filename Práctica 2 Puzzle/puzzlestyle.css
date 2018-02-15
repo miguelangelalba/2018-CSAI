@@ -22,13 +22,14 @@ canvas {
 }
 .myImages{display: none;}
 
-.myImages img{
-    width: 200px;
-    height: 100px;
+#principal {
+    max-height: 300px;
+    max-width: 1000px;
 }
-.myImages-col img{
-    width: 200px;
-    height: 100px;
+.demo {
+    height: 200px;
+    width: 400px;
+
 }
 
 .carrouselContainer{
