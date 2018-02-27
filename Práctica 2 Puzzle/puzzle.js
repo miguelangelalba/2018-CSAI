@@ -6,6 +6,10 @@
 
 var slideIndex = 1;
 
+function casilla(x,y){
+    this.x = x;
+    this.y = y;
+}
 
 function pieza(image,sx,sy,dx,dy,swidht,sheight,pox,poy){
     this.image = image;
@@ -15,7 +19,8 @@ function pieza(image,sx,sy,dx,dy,swidht,sheight,pox,poy){
     this.dX = dx;
     this.sWidht = swidht;
     this.sHeight = sheight;
-    //En este caso dWith y dHeight valen lo mismo
+    this.dWidht = swidht;
+    this.dHeight = sheight;
     //En esta parte defino mi propio tablero y organizo según mis coordeanadas
     //de tablero.
     this.positionOriginalX = pox;
@@ -58,12 +63,6 @@ function prinTime(){
     document.getElementById('time').innerHTML = "Time:" + d.toLocaleTimeString();
 }
 
-function matrizImagen(){
-    var matrix = new array();
-    matrix.id = "im";
-    matrix.x = 0.0;
-    matirx.y = 0.0;
-}
 function recortarImagen(src){
     var myVar = setInterval(prinTime,1000);
 
@@ -137,8 +136,6 @@ function makePuzzle(image){
     //Estas dos variables creo que podría declararlas como constantes.
     var swidht = 200;
     var sheight = 200;
-    //var swidht = 50;
-    //var sheight = 50;
     //Tamaño de la pieza final en este caso lo mismo que antes
     //Mi posicion, estás dos variables las creo para crear mis propias coordenadas y
     //ordenar mejor las piezas
@@ -159,9 +156,35 @@ function makePuzzle(image){
         pox += 1;
     }
     //elimina el elemento 8. El último
-    puzzle.pop(8);
+    //puzzle.pop(8);
     return puzzle;
 
+}
+function rndPuzzle(puzzle,tablero){
+
+    var rndIndex = tablero.length;
+
+    var randomPos = 0;
+    for (var i = 0; i < tablero.length; i++){
+        randomPos = Math.floor(Math.random() * tablero.length);
+        puzzle[randomPos].dX = tablero[i].x;
+        puzzle[randomPos].dY = tablero[i].y;
+    }
+    return puzzle;
+}
+
+function makeTablero(){
+    var x = 0;
+    var y = 0;
+    var tablero = new Array();
+
+    for (x; x < 600; x += 200){
+        for (y; y < 600; y += 200){
+            tablero.push(new casilla(x,y));
+        }
+        y = 0;
+    }
+    return tablero;
 }
 
 function main(){
@@ -173,14 +196,16 @@ var imagere = new Image();
 imagere.src = "Images/reloj.jpg";
 
 var imagersz = resize(imagere);
-//ctx.drawImage(image,0,0,canvas.width,canvas.height);
-//ctx.drawImage(image,0,0,200,200,0,0,200,200);
 
-var puzzle = makePuzzle(imagersz)
+var puzzle = makePuzzle(imagersz);
+console.log(puzzle);
 
-drawPuzzle(puzzle)
-//console.log(puzzle);
-//console.log(puzzle);
+var tablero = makeTablero();
+console.log(tablero);
+randomPuzzle = rndPuzzle(puzzle,tablero);
+drawPuzzle(randomPuzzle);
+console.log(randomPuzzle);
+
 showSlides();
 //var myVar = setInterval(prinTime,1000);
 
