@@ -6,7 +6,8 @@
 
 var slideIndex = 1;
 
-function pieza(image,sx,sy,dy,dx,swidht,sheight,pox,poy){
+
+function pieza(image,sx,sy,dx,dy,swidht,sheight,pox,poy){
     this.image = image;
     this.sX = sx;
     this.sY = sy;
@@ -23,7 +24,7 @@ function pieza(image,sx,sy,dy,dx,swidht,sheight,pox,poy){
     this.myPositionY = poy;
 
     this.drawFicha = function(){
-        ctx.drawImage(image,this.sX,this.sY,this.sWidht,this.sHeight,this.dX,this.dY,this.sWidht,this.sHeight);
+        ctx.drawImage(this.image,this.sX,this.sY,this.sWidht,this.sHeight,this.dX,this.dY,this.sWidht,this.sHeight);
 
     }
     this.changePosition = function(){
@@ -35,19 +36,21 @@ function pieza(image,sx,sy,dy,dx,swidht,sheight,pox,poy){
 
 function drawPuzzle(puzzle){
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    var i = 0;
     for (i in puzzle){
         puzzle[i].drawFicha();
+        console.log(i);
     }
 
 }
 
-function resize(image){
+function resize(img){
 //con esta función redimensiono la imagen para no tener problemas de dónde me
 //las descargo
     //imgResize = image;
-    image.width = 200 ;
-    image.height = 200 ;
-    return image;
+    img.width = 100 ;
+    img.height = 100 ;
+    return img;
 }
 
 function prinTime(){
@@ -134,6 +137,8 @@ function makePuzzle(image){
     //Estas dos variables creo que podría declararlas como constantes.
     var swidht = 200;
     var sheight = 200;
+    //var swidht = 50;
+    //var sheight = 50;
     //Tamaño de la pieza final en este caso lo mismo que antes
     //Mi posicion, estás dos variables las creo para crear mis propias coordenadas y
     //ordenar mejor las piezas
@@ -144,15 +149,17 @@ function makePuzzle(image){
     //el bluce pasará por 0,200 y 400 que son las posiciones del canvas
     for (dx; dx < 600; dx += 200){
         for (dy; dy < 600; dy += 200){
-            if (poy != 3 && pox != 3){
-                puzzle.push(new pieza(image,sx,sy,dy,dx,swidht,sheight,pox,poy));
-            }
+            puzzle.push(new pieza(image,dx,dy,dx,dy,swidht,sheight,pox,poy));
             sy = dy;
             poy += 1;
         }
+        poy = 1;
+        dy = 0;
         sx = dx;
         pox += 1;
     }
+    //elimina el elemento 8. El último
+    puzzle.pop(8);
     return puzzle;
 
 }
@@ -161,17 +168,19 @@ function main(){
 
 var canvas = document.getElementById("canvas");
  ctx = canvas.getContext("2d");
-var image = new Image();
+var imagere = new Image();
 
-image.src = "Images/cohete.jpg";
+imagere.src = "Images/reloj.jpg";
 
-var imagersz = resize(image);
-ctx.drawImage(imagersz,0,0,imagersz.width,imagersz.height);
-console.log(imagersz.width);
-console.log(imagersz.height);
+var imagersz = resize(imagere);
+//ctx.drawImage(image,0,0,canvas.width,canvas.height);
+//ctx.drawImage(image,0,0,200,200,0,0,200,200);
 
-//var puzzle = makePuzzle(imagersz);
-//drawPuzzle(puzzle)
+var puzzle = makePuzzle(imagersz)
+
+drawPuzzle(puzzle)
+//console.log(puzzle);
+//console.log(puzzle);
 showSlides();
 //var myVar = setInterval(prinTime,1000);
 
