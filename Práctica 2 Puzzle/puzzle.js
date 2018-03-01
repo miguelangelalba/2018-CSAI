@@ -11,7 +11,7 @@ function casilla(x,y){
     this.y = y;
 }
 
-function pieza(image,sx,sy,dx,dy,swidht,sheight,pox,poy){
+function pieza(image,draw,sx,sy,dx,dy,swidht,sheight,pox,poy){
     this.image = image;
     this.sX = sx;
     this.sY = sy;
@@ -21,6 +21,7 @@ function pieza(image,sx,sy,dx,dy,swidht,sheight,pox,poy){
     this.sHeight = sheight;
     this.dWidht = swidht;
     this.dHeight = sheight;
+    this.draw = draw;
     //En esta parte defino mi propio tablero y organizo según mis coordeanadas
     //de tablero.
     this.positionOriginalX = pox;
@@ -29,8 +30,9 @@ function pieza(image,sx,sy,dx,dy,swidht,sheight,pox,poy){
     this.myPositionY = poy;
 
     this.drawFicha = function(){
-        ctx.drawImage(this.image,this.sX,this.sY,this.sWidht,this.sHeight,this.dX,this.dY,this.sWidht,this.sHeight);
-
+        if (this.draw == true) {
+            ctx.drawImage(this.image,this.sX,this.sY,this.sWidht,this.sHeight,this.dX,this.dY,this.sWidht,this.sHeight);
+        }
     }
     this.changePosition = function(){
         this.positionX += 1;
@@ -107,9 +109,6 @@ function showSlides(){
             document.getElementById("img3").src = "Images/praga.jpg";
 
             break;
-        //case n:
-        //    code block
-        //    break;
 
         }
     slideIndex++;
@@ -141,12 +140,13 @@ function makePuzzle(image){
     //ordenar mejor las piezas
     var pox = 1;
     var poy = 1;
+    var draw = true;
 
     //me quedaría hacer otro bucle para pasar las posiciones
     //el bluce pasará por 0,200 y 400 que son las posiciones del canvas
     for (dx; dx < 600; dx += 200){
         for (dy; dy < 600; dy += 200){
-            puzzle.push(new pieza(image,dx,dy,dx,dy,swidht,sheight,pox,poy));
+            puzzle.push(new pieza(image,draw,dx,dy,dx,dy,swidht,sheight,pox,poy));
             sy = dy;
             poy += 1;
         }
@@ -160,16 +160,21 @@ function makePuzzle(image){
     return puzzle;
 
 }
+//function changePosition(){}
 function rndPuzzle(puzzle,tablero){
 
-    var rndIndex = tablero.length;
+    var rndTablero = tablero.slice();
 
     var randomPos = 0;
+    console.log("Este es el tamaño del tablero:" + tablero.length);
     for (var i = 0; i < tablero.length; i++){
-        randomPos = Math.floor(Math.random() * tablero.length);
-        puzzle[randomPos].dX = tablero[i].x;
-        puzzle[randomPos].dY = tablero[i].y;
+        randomPos = Math.floor(Math.random() * rndTablero.length);
+        puzzle[i].dX = rndTablero[randomPos].x;
+        puzzle[i].dY = rndTablero[randomPos].y;
+        rndTablero.splice(randomPos,1);
     }
+    puzzle[8].draw = false;
+
     return puzzle;
 }
 
@@ -196,15 +201,10 @@ var imagere = new Image();
 imagere.src = "Images/reloj.jpg";
 
 var imagersz = resize(imagere);
-
 var puzzle = makePuzzle(imagersz);
-console.log(puzzle);
-
 var tablero = makeTablero();
-console.log(tablero);
-randomPuzzle = rndPuzzle(puzzle,tablero);
+var randomPuzzle = rndPuzzle(puzzle,tablero);
 drawPuzzle(randomPuzzle);
-console.log(randomPuzzle);
 
 showSlides();
 //var myVar = setInterval(prinTime,1000);
