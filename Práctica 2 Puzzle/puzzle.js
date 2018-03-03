@@ -34,11 +34,13 @@ function pieza(image,draw,sx,sy,dx,dy,swidht,sheight,pox,poy){
             ctx.drawImage(this.image,this.sX,this.sY,this.sWidht,this.sHeight,this.dX,this.dY,this.sWidht,this.sHeight);
         }
     }
-    this.changePosition = function(){
-        this.positionX += 1;
-        this.positionY += 1;
+    this.changePosition = function(newdraw,newdX,newdY,newmyPositionx,newmyPositionY){
+        this.draw = newdraw;
+        this.dX = newdX;
+        this.dY = newdY;
+        this.myPositionX = newmyPositionx;
+        this.myPositionY = newmyPositionY;
     }
-
 }
 
 function drawPuzzle(puzzle){
@@ -160,7 +162,19 @@ function makePuzzle(image){
     return puzzle;
 
 }
-//function changePosition(){}
+function onPuzzleClick(event,puzzle){
+    var x = event.pageX;
+    var y = event.pageY;
+    alert(x + "," + y);
+    //TEngo que termianr esta parte
+    for (var i = 0; i < puzzle.length; i++){
+        if (x < puzzle[i].dX + object2.width  && object1.x + object1.width  > object2.x &&
+		          object1.y < object2.y + object2.height && object1.y + object1.height > object2.y) {
+                      // The objects are touching
+        }
+    }
+
+}
 function rndPuzzle(puzzle,tablero){
 
     var rndTablero = tablero.slice();
@@ -205,7 +219,9 @@ var puzzle = makePuzzle(imagersz);
 var tablero = makeTablero();
 var randomPuzzle = rndPuzzle(puzzle,tablero);
 drawPuzzle(randomPuzzle);
-
+document.addEventListener('click',function(event){
+    onPuzzleClick(event,puzzle);
+},false);
 showSlides();
 //var myVar = setInterval(prinTime,1000);
 
