@@ -163,17 +163,26 @@ function makePuzzle(image){
 
 }
 function onPuzzleClick(event,puzzle){
-    var x = event.pageX;
-    var y = event.pageY;
-    alert(x + "," + y);
+    var ratonPosX = event.pageX - 375;
+    var ratonPosY = event.pageY - 595;
+    var left = ratonPosX;
+    var right = ratonPosX;
+    var top = ratonPosY;
+    var bottom = ratonPosY;
+
+    alert(ratonPosX + "," + ratonPosY);
     //TEngo que termianr esta parte
     for (var i = 0; i < puzzle.length; i++){
-        if (x < puzzle[i].dX + object2.width  && object1.x + object1.width  > object2.x &&
-		          object1.y < object2.y + object2.height && object1.y + object1.height > object2.y) {
-                      // The objects are touching
+        var r_left = puzzle[i].dX;
+        var r_right = puzzle[i].dX + puzzle[i].dWidht;
+        var r_top = puzzle[i].dY + puzzle[i].dHeight;
+        var r_bottom = puzzle[i].dY;
+        console.log("Pieza" + i + ":"+ "izquierda:" + r_left + "derecha:" + r_right + "arriba: " + r_top + "abajo:" + r_bottom);
+        console.log("ratonx:" + ratonPosX + "ratony:" + ratonPosY);
+        if (right >= r_left && left <= r_right && top >= r_bottom && bottom <= r_top){
+            alert(puzzle[i].myPositionX + "," + puzzle[i].myPositionY);
         }
     }
-
 }
 function rndPuzzle(puzzle,tablero){
 
