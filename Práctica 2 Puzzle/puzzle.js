@@ -6,9 +6,11 @@
 
 var slideIndex = 1;
 
-function casilla(x,y){
+function casilla(x,y,posX,posY){
     this.x = x;
     this.y = y;
+    this.myPositionX = posX;
+    this.myPositionY = posY;
 }
 
 function pieza(image,draw,sx,sy,dx,dy,swidht,sheight,pox,poy){
@@ -30,27 +32,28 @@ function pieza(image,draw,sx,sy,dx,dy,swidht,sheight,pox,poy){
     this.myPositionY = poy;
 
     this.drawFicha = function(){
+        console.log("pintando",this);
         if (this.draw == true) {
             ctx.drawImage(this.image,this.sX,this.sY,this.sWidht,this.sHeight,this.dX,this.dY,this.sWidht,this.sHeight);
         }
     }
-    this.changePosition = function(newdraw,newdX,newdY,newmyPositionx,newmyPositionY){
-        this.draw = newdraw;
-        this.dX = newdX;
-        this.dY = newdY;
-        this.myPositionX = newmyPositionx;
-        this.myPositionY = newmyPositionY;
+    this.changePosition = function(pieza){
+        console.log(pieza);
+        this.draw = true;
+        this.dX = pieza.dX;
+        this.dY = pieza.dY;
+        this.myPositionX = pieza.myPositionX;
+        this.myPositionY = pieza.myPositionY;
     }
 }
 
-function drawPuzzle(puzzle){
+function drawPuzzle(puzz){
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     var i = 0;
-    for (i in puzzle){
-        puzzle[i].drawFicha();
-        console.log(i);
+    console.log("Estoy pintando el puzzle");
+    for (i in puzz){
+        puzz[i].drawFicha();
     }
-
 }
 
 function resize(img){
@@ -162,8 +165,28 @@ function makePuzzle(image){
     return puzzle;
 
 }
-function onPuzzleClick(event,puzzle){
-    var ratonPosX = event.pageX - 375;
+function checkPiezaToMove(puzz,pieza){
+    var moduloX;
+    var moduloY;
+    for (i in puzz){
+        moduloX = Math.abs(puzz[i].myPositionX - pieza.myPositionX);
+        moduloY = Math.abs(puzz[i].myPositionY - pieza.myPositionY);
+        if (((moduloX || moduloY) == 1) && ((moduloX != moduloY)) && puzz[i].draw == false ){
+            console.log(moduloX + "," + moduloY);
+            console.log("Pieza a mover: ")
+            console.log(puzz[i].myPositionX,puzz[i].myPositionY);
+
+            puzz[i].changePosition(pieza);
+            console.log(puzz[i]);
+
+        }
+
+    }
+
+}
+
+function onPuzzleClick(event,puzz){
+    var ratonPosX = event.pageX - 375 - 270;// Creo que esto cambia dependiendo de la pantalla
     var ratonPosY = event.pageY - 595;
     var left = ratonPosX;
     var right = ratonPosX;
@@ -172,15 +195,14 @@ function onPuzzleClick(event,puzzle){
 
     alert(ratonPosX + "," + ratonPosY);
     //TEngo que termianr esta parte
-    for (var i = 0; i < puzzle.length; i++){
-        var r_left = puzzle[i].dX;
-        var r_right = puzzle[i].dX + puzzle[i].dWidht;
-        var r_top = puzzle[i].dY + puzzle[i].dHeight;
-        var r_bottom = puzzle[i].dY;
-        console.log("Pieza" + i + ":"+ "izquierda:" + r_left + "derecha:" + r_right + "arriba: " + r_top + "abajo:" + r_bottom);
-        console.log("ratonx:" + ratonPosX + "ratony:" + ratonPosY);
+    for (var i = 0; i < puzz.length; i++){
+        var r_left = puzz[i].dX;
+        var r_right = puzz[i].dX + puzz[i].dWidht;
+        var r_top = puzz[i].dY + puzz[i].dHeight;
+        var r_bottom = puzz[i].dY;
         if (right >= r_left && left <= r_right && top >= r_bottom && bottom <= r_top){
-            alert(puzzle[i].myPositionX + "," + puzzle[i].myPositionY);
+            alert(puzz[i].myPositionX + "," + puzz[i].myPositionY);
+            return puzz[i];
         }
     }
 }
@@ -189,11 +211,12 @@ function rndPuzzle(puzzle,tablero){
     var rndTablero = tablero.slice();
 
     var randomPos = 0;
-    console.log("Este es el tamaño del tablero:" + tablero.length);
     for (var i = 0; i < tablero.length; i++){
         randomPos = Math.floor(Math.random() * rndTablero.length);
         puzzle[i].dX = rndTablero[randomPos].x;
         puzzle[i].dY = rndTablero[randomPos].y;
+        puzzle[i].myPositionX = rndTablero[randomPos].myPositionX;
+        puzzle[i].myPositionY = rndTablero[randomPos].myPositionY;
         rndTablero.splice(randomPos,1);
     }
     puzzle[8].draw = false;
@@ -204,13 +227,18 @@ function rndPuzzle(puzzle,tablero){
 function makeTablero(){
     var x = 0;
     var y = 0;
+    var posX = 1;
+    var posY = 1;
     var tablero = new Array();
 
     for (x; x < 600; x += 200){
         for (y; y < 600; y += 200){
-            tablero.push(new casilla(x,y));
+            tablero.push(new casilla(x,y,posX,posY));
+            posY += 1
         }
         y = 0;
+        posY = 1;
+        posX += 1;
     }
     return tablero;
 }
@@ -229,7 +257,10 @@ var tablero = makeTablero();
 var randomPuzzle = rndPuzzle(puzzle,tablero);
 drawPuzzle(randomPuzzle);
 document.addEventListener('click',function(event){
-    onPuzzleClick(event,puzzle);
+    piezaToMove = onPuzzleClick(event,randomPuzzle);
+    checkPiezaToMove(randomPuzzle,piezaToMove);
+    drawPuzzle(randomPuzzle);
+
 },false);
 showSlides();
 //var myVar = setInterval(prinTime,1000);
