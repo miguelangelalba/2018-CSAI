@@ -183,36 +183,33 @@ function checkPiezaToMove(puzz,pieza){
     var moduloY;
     var posArrayPiezaBlanco;
         objetoPieza = pieza[0];
-        console.log(objetoPieza.draw);
-    console.log("Pieza que le paso", pieza);
+        console.log("Pieza que le paso", pieza);
     for (i in puzz){
         moduloX = Math.abs(puzz[i].myPositionX - pieza[0].myPositionX);
         moduloY = Math.abs(puzz[i].myPositionY - pieza[0].myPositionY);
 
         if (((moduloX || moduloY) == 1) && ((moduloX != moduloY)) && puzz[i].draw == false ){
-            //puzz[posArrayPiezaBlanco].draw = true;
-            //pieza en blanco
-            //puzz[i].changePosition(pieza[0].dX,pieza[0].dY,pieza[0].myPositionX,pieza[0].myPositionY);
-            console.log("Antes",puzz[i]);
-
-            //puzz[i].draw = false;
-            //puzz[i].dX = pieza[0].dX;
-            //puzz[i].dY = pieza[0].dY;
-            //puzz[i].myPositionX = pieza[0].myPositionX;
-            //puzz[i].myPositionY = pieza[0].myPositionY;
-            //puzz[i]
+            console.log("Antespuzzle:",puzz[i]);
+            console.log("Antespieza:", puzz[pieza[1]]);
             //puzz[pieza[1]].draw = false ;
-            puzz[pieza[1]].draw = puzz[i].draw;
+            //puzz[pieza[1]].draw = puzz[i].draw;
             //puzz[pieza[1]].dX = puzz[i].dX;
             ///puzz[pieza[1]].dY = puzz[i].dY;
             //puzz[pieza[1]].myPositionX = puzz[i].myPositionX;
             //puzz[pieza[1]].myPositionY = puzz[i].myPositionY;
-            console.log(objetoPieza.draw);
-            puzz[i].draw = objetoPieza.draw;
+            //console.log(objetoPieza.draw);
+            //puzz[i].draw = objetoPieza.draw;
+            //[puzz[pieza[1]].draw,puzz[i].draw] = [puzz[i].draw,puzz[pieza[1]].draw];
+            //sincermante no se porque está funcionando esto no debería...
+            [puzz[pieza[1]].dX,puzz[i].dX] = [puzz[i].dX,puzz[pieza[1]].dX];
+            [puzz[pieza[1]].dY,puzz[i].dY] = [puzz[i].dY,puzz[pieza[1]].dY];
+            [puzz[pieza[1]].myPositionX,puzz[i].myPositionX] = [puzz[i].myPositionX,puzz[pieza[1]].myPositionX];
+            [puzz[pieza[1]].myPositionY,puzz[i].myPositionY] = [puzz[i].myPositionY,puzz[pieza[1]].myPositionY];
 
             console.log("Después",puzz[i]);
+            console.log("Después",puzz[pieza[1]]);
         }
-        console
+        
     }
     return puzz;
 }
