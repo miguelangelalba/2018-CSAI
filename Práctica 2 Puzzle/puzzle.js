@@ -31,26 +31,26 @@ function pieza(image,draw,sx,sy,dx,dy,swidht,sheight,pox,poy){
     this.myPositionX = pox;
     this.myPositionY = poy;
 
+    var that = this;
+
     this.drawFicha = function(){
-        console.log("pintando",this);
+        //console.log("pintando",this);
         if (this.draw == true) {
             ctx.drawImage(this.image,this.sX,this.sY,this.sWidht,this.sHeight,this.dX,this.dY,this.sWidht,this.sHeight);
         }
     }
-    this.changePosition = function(pieza){
-        console.log(pieza);
-        this.draw = true;
-        this.dX = pieza.dX;
-        this.dY = pieza.dY;
-        this.myPositionX = pieza.myPositionX;
-        this.myPositionY = pieza.myPositionY;
+    this.changePosition = function(dX,dY,myPositionX,myPositionY){
+        that.draw = true;
+        that.dX = dX;
+        that.dY = dY;
+        that.myPositionX = myPositionX;
+        that.myPositionY = myPositionY;
     }
 }
 
 function drawPuzzle(puzz){
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     var i = 0;
-    console.log("Estoy pintando el puzzle");
     for (i in puzz){
         puzz[i].drawFicha();
     }
@@ -127,6 +127,19 @@ function showSlides(){
     setTimeout(showSlides, 4000); // Change image every 2 seconds
 }
 
+function puzzleOk(puzz){
+    var ok = 1;
+    for (i in puzz){
+        if((puzz[i].positionOriginalX == puzz[i].myPositionX) || (puzz[i].positionOriginalY == puzz[i].myPositionY))
+            doIt += 1;
+            if (ok == 9){
+                return true;
+            }else {
+                return false;
+            }
+    }
+}
+
 function makePuzzle(image){
 
     var puzzle = new Array();
@@ -168,30 +181,50 @@ function makePuzzle(image){
 function checkPiezaToMove(puzz,pieza){
     var moduloX;
     var moduloY;
+    var posArrayPiezaBlanco;
+        objetoPieza = pieza[0];
+        console.log(objetoPieza.draw);
+    console.log("Pieza que le paso", pieza);
     for (i in puzz){
-        moduloX = Math.abs(puzz[i].myPositionX - pieza.myPositionX);
-        moduloY = Math.abs(puzz[i].myPositionY - pieza.myPositionY);
+        moduloX = Math.abs(puzz[i].myPositionX - pieza[0].myPositionX);
+        moduloY = Math.abs(puzz[i].myPositionY - pieza[0].myPositionY);
+
         if (((moduloX || moduloY) == 1) && ((moduloX != moduloY)) && puzz[i].draw == false ){
-            console.log(moduloX + "," + moduloY);
-            console.log("Pieza a mover: ")
-            console.log(puzz[i].myPositionX,puzz[i].myPositionY);
+            //puzz[posArrayPiezaBlanco].draw = true;
+            //pieza en blanco
+            //puzz[i].changePosition(pieza[0].dX,pieza[0].dY,pieza[0].myPositionX,pieza[0].myPositionY);
+            console.log("Antes",puzz[i]);
 
-            puzz[i].changePosition(pieza);
-            console.log(puzz[i]);
+            //puzz[i].draw = false;
+            //puzz[i].dX = pieza[0].dX;
+            //puzz[i].dY = pieza[0].dY;
+            //puzz[i].myPositionX = pieza[0].myPositionX;
+            //puzz[i].myPositionY = pieza[0].myPositionY;
+            //puzz[i]
+            //puzz[pieza[1]].draw = false ;
+            puzz[pieza[1]].draw = puzz[i].draw;
+            //puzz[pieza[1]].dX = puzz[i].dX;
+            ///puzz[pieza[1]].dY = puzz[i].dY;
+            //puzz[pieza[1]].myPositionX = puzz[i].myPositionX;
+            //puzz[pieza[1]].myPositionY = puzz[i].myPositionY;
+            console.log(objetoPieza.draw);
+            puzz[i].draw = objetoPieza.draw;
 
+            console.log("Después",puzz[i]);
         }
-
+        console
     }
-
+    return puzz;
 }
 
 function onPuzzleClick(event,puzz){
-    var ratonPosX = event.pageX - 375 - 270;// Creo que esto cambia dependiendo de la pantalla
+    var ratonPosX = event.pageX - 375;// Creo que esto cambia dependiendo de la pantalla
     var ratonPosY = event.pageY - 595;
     var left = ratonPosX;
     var right = ratonPosX;
     var top = ratonPosY;
     var bottom = ratonPosY;
+    var piezaSeleccionada = new Array();
 
     alert(ratonPosX + "," + ratonPosY);
     //TEngo que termianr esta parte
@@ -202,7 +235,9 @@ function onPuzzleClick(event,puzz){
         var r_bottom = puzz[i].dY;
         if (right >= r_left && left <= r_right && top >= r_bottom && bottom <= r_top){
             alert(puzz[i].myPositionX + "," + puzz[i].myPositionY);
-            return puzz[i];
+            piezaSeleccionada[0] = puzz[i];
+            piezaSeleccionada[1] = i;
+            return piezaSeleccionada;
         }
     }
 }
@@ -258,8 +293,9 @@ var randomPuzzle = rndPuzzle(puzzle,tablero);
 drawPuzzle(randomPuzzle);
 document.addEventListener('click',function(event){
     piezaToMove = onPuzzleClick(event,randomPuzzle);
-    checkPiezaToMove(randomPuzzle,piezaToMove);
+    randomPuzzle = checkPiezaToMove(randomPuzzle,piezaToMove);
     drawPuzzle(randomPuzzle);
+    //console.log(randomPuzzle);
 
 },false);
 showSlides();
