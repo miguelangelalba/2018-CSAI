@@ -3,7 +3,6 @@
 //falla aquí tengoq que ver que le pasa
 //const canvas = document.getElementById('canvas');
 //const ctx = canvas.getContext("2d");
-
 var slideIndex = 1;
 
 function casilla(x,y,posX,posY){
@@ -128,15 +127,15 @@ function showSlides(){
 }
 
 function puzzleOk(puzz){
-    var ok = 1;
+    var doIt = 1;
     for (i in puzz){
-        if((puzz[i].positionOriginalX == puzz[i].myPositionX) || (puzz[i].positionOriginalY == puzz[i].myPositionY))
+        console.log(puzz[i]);
+        if((puzz[i].positionOriginalX === puzz[i].myPositionX) && (puzz[i].positionOriginalY === puzz[i].myPositionY)){
             doIt += 1;
-            if (ok == 9){
+            if (doIt == 9){
                 return true;
-            }else {
-                return false;
             }
+        }
     }
 }
 
@@ -178,27 +177,17 @@ function makePuzzle(image){
     return puzzle;
 
 }
-function checkPiezaToMove(puzz,pieza){
+function movePieza(puzz,pieza){
     var moduloX;
     var moduloY;
     var posArrayPiezaBlanco;
         objetoPieza = pieza[0];
-        console.log("Pieza que le paso", pieza);
+        //console.log("Pieza que le paso", pieza);
     for (i in puzz){
         moduloX = Math.abs(puzz[i].myPositionX - pieza[0].myPositionX);
         moduloY = Math.abs(puzz[i].myPositionY - pieza[0].myPositionY);
 
         if (((moduloX || moduloY) == 1) && ((moduloX != moduloY)) && puzz[i].draw == false ){
-            console.log("Antespuzzle:",puzz[i]);
-            console.log("Antespieza:", puzz[pieza[1]]);
-            //puzz[pieza[1]].draw = false ;
-            //puzz[pieza[1]].draw = puzz[i].draw;
-            //puzz[pieza[1]].dX = puzz[i].dX;
-            ///puzz[pieza[1]].dY = puzz[i].dY;
-            //puzz[pieza[1]].myPositionX = puzz[i].myPositionX;
-            //puzz[pieza[1]].myPositionY = puzz[i].myPositionY;
-            //console.log(objetoPieza.draw);
-            //puzz[i].draw = objetoPieza.draw;
             //[puzz[pieza[1]].draw,puzz[i].draw] = [puzz[i].draw,puzz[pieza[1]].draw];
             //sincermante no se porque está funcionando esto no debería...
             [puzz[pieza[1]].dX,puzz[i].dX] = [puzz[i].dX,puzz[pieza[1]].dX];
@@ -206,24 +195,21 @@ function checkPiezaToMove(puzz,pieza){
             [puzz[pieza[1]].myPositionX,puzz[i].myPositionX] = [puzz[i].myPositionX,puzz[pieza[1]].myPositionX];
             [puzz[pieza[1]].myPositionY,puzz[i].myPositionY] = [puzz[i].myPositionY,puzz[pieza[1]].myPositionY];
 
-            console.log("Después",puzz[i]);
-            console.log("Después",puzz[pieza[1]]);
         }
-        
     }
     return puzz;
 }
 
 function onPuzzleClick(event,puzz){
-    var ratonPosX = event.pageX - 375;// Creo que esto cambia dependiendo de la pantalla
-    var ratonPosY = event.pageY - 595;
+    var ratonPosX = event.pageX - 375 ;// Creo que esto cambia dependiendo de la pantalla
+    var ratonPosY = event.pageY - 595 ;//-361 portatil
     var left = ratonPosX;
     var right = ratonPosX;
     var top = ratonPosY;
     var bottom = ratonPosY;
     var piezaSeleccionada = new Array();
 
-    alert(ratonPosX + "," + ratonPosY);
+    //alert(ratonPosX + "," + ratonPosY);
     //TEngo que termianr esta parte
     for (var i = 0; i < puzz.length; i++){
         var r_left = puzz[i].dX;
@@ -231,7 +217,7 @@ function onPuzzleClick(event,puzz){
         var r_top = puzz[i].dY + puzz[i].dHeight;
         var r_bottom = puzz[i].dY;
         if (right >= r_left && left <= r_right && top >= r_bottom && bottom <= r_top){
-            alert(puzz[i].myPositionX + "," + puzz[i].myPositionY);
+            //alert(puzz[i].myPositionX + "," + puzz[i].myPositionY);
             piezaSeleccionada[0] = puzz[i];
             piezaSeleccionada[1] = i;
             return piezaSeleccionada;
@@ -287,12 +273,23 @@ var imagersz = resize(imagere);
 var puzzle = makePuzzle(imagersz);
 var tablero = makeTablero();
 var randomPuzzle = rndPuzzle(puzzle,tablero);
+var doIt = false;
 drawPuzzle(randomPuzzle);
 document.addEventListener('click',function(event){
     piezaToMove = onPuzzleClick(event,randomPuzzle);
-    randomPuzzle = checkPiezaToMove(randomPuzzle,piezaToMove);
+    randomPuzzle = movePieza(randomPuzzle,piezaToMove);
     drawPuzzle(randomPuzzle);
-    //console.log(randomPuzzle);
+    doIt = puzzleOk(randomPuzzle);
+    console.log(doIt);
+    if (doIt == true){
+        for (i in randomPuzzle){
+            if (randomPuzzle[i].draw == false){
+                randomPuzzle[i].draw = true;
+                drawPuzzle(randomPuzzle);
+            }
+        }
+    }
+        //console.log(randomPuzzle);
 
 },false);
 showSlides();
