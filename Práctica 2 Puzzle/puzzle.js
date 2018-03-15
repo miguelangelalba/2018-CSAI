@@ -200,9 +200,13 @@ function movePieza(puzz,pieza){
     return puzz;
 }
 
-function onPuzzleClick(event,puzz){
-    var ratonPosX = event.pageX - 375 ;// Creo que esto cambia dependiendo de la pantalla
-    var ratonPosY = event.pageY - 595 ;//-361 portatil
+function onPuzzleClick(event,puzz,izquierda,top){
+    console.log(event.pageX);
+    console.log(event.pageY);
+    console.log(izquierda);
+    console.log(top);
+    var ratonPosX = event.pageX - izquierda; //375 ;// Creo que esto cambia dependiendo de la pantalla
+    var ratonPosY = event.pageY - top - 319; //595 ;//-361 portatil
     var left = ratonPosX;
     var right = ratonPosX;
     var top = ratonPosY;
@@ -274,9 +278,13 @@ var puzzle = makePuzzle(imagersz);
 var tablero = makeTablero();
 var randomPuzzle = rndPuzzle(puzzle,tablero);
 var doIt = false;
+var izquierda = canvas.offsetLeft;
+var top = canvas.offsetTop;
+console.log(izquierda);
+console.log(top);
 drawPuzzle(randomPuzzle);
 document.addEventListener('click',function(event){
-    piezaToMove = onPuzzleClick(event,randomPuzzle);
+    piezaToMove = onPuzzleClick(event,randomPuzzle,izquierda,top);
     randomPuzzle = movePieza(randomPuzzle,piezaToMove);
     drawPuzzle(randomPuzzle);
     doIt = puzzleOk(randomPuzzle);
