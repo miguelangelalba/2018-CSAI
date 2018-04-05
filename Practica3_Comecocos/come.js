@@ -1,99 +1,169 @@
 
-function makeGameArea(){
-    /* ------------ Start Pre-Build Walls  ------------ */
-		this.buildWalls = function() {
-			if (this.ghostMode === 0) game.wallColor = "Blue";
-			else game.wallColor = "Red";
-			canvas_walls = document.createElement('canvas');
-			canvas_walls.width = game.canvas.width;
-			canvas_walls.height = game.canvas.height;
-			context_walls = canvas_walls.getContext("2d");
+var pacman = 6;
 
-			context_walls.fillStyle = game.wallColor;
-			context_walls.strokeStyle = game.wallColor;
+var walls = [];
 
-			//horizontal outer
-			buildWall(context_walls,0,0,18,1);
-			buildWall(context_walls,0,12,18,1);
 
-			// vertical outer
-			buildWall(context_walls,0,0,1,6);
-			buildWall(context_walls,0,7,1,6);
-			buildWall(context_walls,17,0,1,6);
-			buildWall(context_walls,17,7,1,6);
-
-			// ghost base
-			buildWall(context_walls,7,4,1,1);
-			buildWall(context_walls,6,5,1,2);
-			buildWall(context_walls,10,4,1,1);
-			buildWall(context_walls,11,5,1,2);
-			buildWall(context_walls,6,6,6,1);
-
-			// ghost base door
-			context_walls.fillRect(8*2*pacman.radius,pacman.radius/2+4*2*pacman.radius+5, 4*pacman.radius, 1);
-
-			// single blocks
-			buildWall(context_walls,4,0,1,2);
-			buildWall(context_walls,13,0,1,2);
-
-			buildWall(context_walls,2,2,1,2);
-			buildWall(context_walls,6,2,2,1);
-			buildWall(context_walls,15,2,1,2);
-			buildWall(context_walls,10,2,2,1);
-
-			buildWall(context_walls,2,3,2,1);
-			buildWall(context_walls,14,3,2,1);
-			buildWall(context_walls,5,3,1,1);
-			buildWall(context_walls,12,3,1,1);
-			buildWall(context_walls,3,3,1,3);
-			buildWall(context_walls,14,3,1,3);
-
-			buildWall(context_walls,3,4,1,1);
-			buildWall(context_walls,14,4,1,1);
-
-			buildWall(context_walls,0,5,2,1);
-			buildWall(context_walls,3,5,2,1);
-			buildWall(context_walls,16,5,2,1);
-			buildWall(context_walls,13,5,2,1);
-
-			buildWall(context_walls,0,7,2,2);
-			buildWall(context_walls,16,7,2,2);
-			buildWall(context_walls,3,7,2,2);
-			buildWall(context_walls,13,7,2,2);
-
-			buildWall(context_walls,4,8,2,2);
-			buildWall(context_walls,12,8,2,2);
-			buildWall(context_walls,5,8,3,1);
-			buildWall(context_walls,10,8,3,1);
-
-			buildWall(context_walls,2,10,1,1);
-			buildWall(context_walls,15,10,1,1);
-			buildWall(context_walls,7,10,4,1);
-			buildWall(context_walls,4,11,2,2);
-			buildWall(context_walls,12,11,2,2);
-			/* ------------ End Pre-Build Walls  ------------ */
-		};
-
+function buildWall2(context,x,y,width,height){
+	context.fillRect(x,y,width,height);
 }
 
-function pinta(canvas,ctx){
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = 'red';
-    ctx.beginPath();
-     ctx.moveTo(0,0);
-    ctx.lineTo(100,200);
-    ctx.lineTo(150,120);
-     ctx.closePath();
-    ctx.fill();
-    ctx.restore();
-};
+function makeGameArea2(){
+	//var canvas_walls = document.getElementById('canvas');
 
+	//canvas_walls.width = canvas.width;
+	//canvas_walls.height = canvas.height;
+	//var context_walls = canvas_walls.getContext("2d");
+
+	//context_walls.fillStyle = 'Blue';
+	//context_walls.strokeStyle = 'Blue';
+	var context_walls = ctx;
+	context_walls.fillStyle = 'Blue';
+	context_walls.strokeStyle = 'Blue';
+	//Paredes Horizontales
+	//
+	buildWall2(context_walls,0,6,296,6);
+	buildWall2(context_walls,0,140,298,6);
+
+	//Paredes Verticales
+	buildWall2(context_walls,0,6,8,60);
+	buildWall2(context_walls,0,80,8,60);
+	buildWall2(context_walls,290,6,8,60);
+	buildWall2(context_walls,290,80,8,60);
+
+	//Salientes de la paredes
+	//Verticales
+	buildWall2(context_walls,60,6,8,20);
+	buildWall2(context_walls,230,6,8,16);
+	buildWall2(context_walls,60,130,24,16);
+	buildWall2(context_walls,216,130,24,16);
+
+	//Horizontales
+	buildWall2(context_walls,0,60,23,6);
+	buildWall2(context_walls,274,60,23,6);
+	buildWall2(context_walls,274,80,23,18);
+	buildWall2(context_walls,0,80,23,18);
+
+	//Interior del mapa
+	//Verticales
+	buildWall2(context_walls,30,26,8,16);
+	buildWall2(context_walls,45,40,8,26);
+	buildWall2(context_walls,60,96,24,18);
+	//centro
+	buildWall2(context_walls,200,60,8,16);
+	buildWall2(context_walls,90,60,8,16);
+
+
+	//derecha
+	buildWall2(context_walls,245,44,8,16);
+	buildWall2(context_walls,260,26,8,16);
+
+	//punto
+
+	buildWall2(context_walls,30,119,8,6);
+	buildWall2(context_walls,260,119,8,6);
+	buildWall2(context_walls,80,40,8,8);
+	buildWall2(context_walls,210,40,8,8);
+
+	//Punto centro
+	buildWall2(context_walls,110,50,8,8);
+	buildWall2(context_walls,180,50,8,8);
+
+
+
+	//Horizontales
+	buildWall2(context_walls,90,30,43,6);
+	buildWall2(context_walls,163,30,43,6);
+	buildWall2(context_walls,60,96,72,6);
+	buildWall2(context_walls,230,60,23,6);
+
+
+	buildWall2(context_walls,165,96,72,6);
+	buildWall2(context_walls,215,96,24,18);
+
+	buildWall2(context_walls,30,40,23,6);
+	buildWall2(context_walls,230,80,23,18);
+	buildWall2(context_walls,92,70,115,6);
+
+	//Derecha
+	buildWall2(context_walls,245,40,23,6);
+	buildWall2(context_walls,105,119,85,6);
+	buildWall2(context_walls,45,60,23,6);
+	buildWall2(context_walls,45,80,23,18);
+
+	context_walls.fillStyle = 'yellow';
+	context_walls.strokeStyle = 'yellow';
+
+	context_walls.beginPath();
+	context_walls.arc(25, 73, 5, 0.2 * Math.PI, 1.8 * Math.PI);
+
+	// The line leading back to the center and then closing the path to finish the
+	// open mouth
+	context_walls.lineTo(25, 73);
+	context_walls.closePath();
+
+	// Fill pacman's head yellow
+	//context.fillStyle = "#FF0";
+	context_walls.fill();
+}
+function comecocos(){
+	var canvas_pac = document.getElementById('canvas');
+
+	canvas_pac.width = canvas.width;
+	canvas_pac.height = canvas.height;
+	var context_pac = canvas_pac.getContext("2d");
+
+	//context_pac.fillStyle = 'yellow';
+	//context_pac.strokeStyle = 'yellow';
+
+	context_pac.beginPath();
+	context_pac.arc(25, 25, 10, 0.2 * Math.PI, 1.8 * Math.PI);
+
+	// The line leading back to the center and then closing the path to finish the
+	// open mouth
+	context_pac.lineTo(25, 25);
+	context_pac.closePath();
+
+	// Fill pacman's head yellow
+	//context.fillStyle = "#FF0";
+	context_pac.fill();
+}
+
+function pacman(id,posX,posY,color){
+	this.id = id;
+	this.posX = posX;
+	this.posY = posY;
+	this.color	= color;
+	this.radious = 10;
+	this.speedX = 0;
+	this.speedY = 0;
+	this.lives = 3;
+	this.draw = function(){
+		context_pac.fillStyle = this.color;
+		context_pac.strokeStyle = this.color;
+		context_pac.beginPath();
+		context_pac.arc(this.posX, this.posY,this.radious, 0.2 * Math.PI, 1.8 * Math.PI);
+		// open mouth
+		context_pac.lineTo(this.posX, this.posY);
+		context_pac.closePath();
+		context_pac.fill();
+
+	}
+	this.move = function(){
+		this.posX += this.speedX;
+		this.posY += this.speedY;
+
+		if(this.posX > (canvas.width + 20)){
+			this.posX = -5;
+		}else if(this.posX < (-26)){
+			this.posX = canvas.width + 5;
+		}
+	}
+}
 function startGame(){
-    //makeGameArea ()
-    var canvas = document.getElementById("canvas");
-    var ctx = canvas.getContext("2d");
-
-    pinta(canvas,ctx);
-
-
+	canvas = document.getElementById('canvas');
+	ctx = canvas.getContext('2d');
+	makeGameArea2();
+	//comecocos();
+    //pinta(canvas,ctx);
 }
