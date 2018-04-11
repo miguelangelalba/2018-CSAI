@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>Puzzle</title>
+	<script src="galeria.js"></script>
+    <link rel="stylesheet" type="text/css" href="galeria.css">
+
+</head>
+
+<body>
+
+<div class="galeria-container">
+  <h2>Slideshow Indicators</h2>
+  <p>Using images to indicate how many slides there are in the slideshow, and highlight the image the user is currently viewing.</p>
+</div>
+
+<div class="galeria-content" style="max-width:1200px">
+  <img class="mySlides" src="Images/tesla.jpg" >
+  <img class="mySlides" src="Images/cohete.jpg">
+  <img class="mySlides" src="Images/praga.jpg" >
+
+  <div class="galeria-row-padding galeria-section">
+    <div class="galeria-col s4">
+      <img class="demo galeria-opacity w3-hover-opacity-off" src="Images/tesla.jpg" onclick="currentDiv(1)">
+    </div>
+    <div class="galeria-col s4">
+      <img class="demo galeria-opacity galeria-hover-opacity-off" src="Images/cohete.jpg" onclick="currentDiv(2)">
+    </div>
+    <div class="galeria-col s4">
+      <img class="demo galeria-opacity galeria-hover-opacity-off" src="Images/praga.jpg" onclick="currentDiv(3)">
+    </div>
+  </div>
+</div>
+
+<script>
+var slideIndex = 1;
+showDivs(slideIndex);
+
+function plusDivs(n) {
+  showDivs(slideIndex += n);
+}
+
+function currentDiv(n) {
+  showDivs(slideIndex = n);
+}
+
+function showDivs(n) {
+  var i;
+  var x = document.getElementsByClassName("mySlides");
+  var dots = document.getElementsByClassName("demo");
+  if (n > x.length) {slideIndex = 1}
+  if (n < 1) {slideIndex = x.length}
+  for (i = 0; i < x.length; i++) {
+     x[i].style.display = "none";
+  }
+  for (i = 0; i < dots.length; i++) {
+     dots[i].className = dots[i].className.replace(" galeria-opacity-off", "");
+  }
+  x[slideIndex-1].style.display = "block";
+  dots[slideIndex-1].className += " galeria-opacity-off";
+}
+</script>
+</body>
+</html>
+
