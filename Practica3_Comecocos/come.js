@@ -1,23 +1,16 @@
 
-var pacman = 6;
+//var pacmanLives = 6;
 
 var walls = [];
+var pac = [];
 
 
 function buildWall2(context,x,y,width,height){
 	context.fillRect(x,y,width,height);
 }
 
-function makeGameArea2(){
-	//var canvas_walls = document.getElementById('canvas');
-
-	//canvas_walls.width = canvas.width;
-	//canvas_walls.height = canvas.height;
-	//var context_walls = canvas_walls.getContext("2d");
-
-	//context_walls.fillStyle = 'Blue';
-	//context_walls.strokeStyle = 'Blue';
-	var context_walls = ctx;
+function makeGameArea2(context){
+	var context_walls = context;
 	context_walls.fillStyle = 'Blue';
 	context_walls.strokeStyle = 'Blue';
 	//Paredes Horizontales
@@ -69,8 +62,6 @@ function makeGameArea2(){
 	buildWall2(context_walls,110,50,8,8);
 	buildWall2(context_walls,180,50,8,8);
 
-
-
 	//Horizontales
 	buildWall2(context_walls,90,30,43,6);
 	buildWall2(context_walls,163,30,43,6);
@@ -91,63 +82,31 @@ function makeGameArea2(){
 	buildWall2(context_walls,45,60,23,6);
 	buildWall2(context_walls,45,80,23,18);
 
-	context_walls.fillStyle = 'yellow';
-	context_walls.strokeStyle = 'yellow';
-
-	context_walls.beginPath();
-	context_walls.arc(25, 73, 5, 0.2 * Math.PI, 1.8 * Math.PI);
-
-	// The line leading back to the center and then closing the path to finish the
-	// open mouth
-	context_walls.lineTo(25, 73);
-	context_walls.closePath();
-
-	// Fill pacman's head yellow
-	//context.fillStyle = "#FF0";
-	context_walls.fill();
-}
-function comecocos(){
-	var canvas_pac = document.getElementById('canvas');
-
-	canvas_pac.width = canvas.width;
-	canvas_pac.height = canvas.height;
-	var context_pac = canvas_pac.getContext("2d");
-
-	//context_pac.fillStyle = 'yellow';
-	//context_pac.strokeStyle = 'yellow';
-
-	context_pac.beginPath();
-	context_pac.arc(25, 25, 10, 0.2 * Math.PI, 1.8 * Math.PI);
-
-	// The line leading back to the center and then closing the path to finish the
-	// open mouth
-	context_pac.lineTo(25, 25);
-	context_pac.closePath();
-
-	// Fill pacman's head yellow
-	//context.fillStyle = "#FF0";
-	context_pac.fill();
 }
 
-function pacman(id,posX,posY,color){
+function draw(){
+
+}
+
+function pacman(id,posX,posY,color,context){
 	this.id = id;
 	this.posX = posX;
 	this.posY = posY;
 	this.color	= color;
-	this.radious = 10;
+	this.radious = 4;
 	this.speedX = 0;
 	this.speedY = 0;
 	this.lives = 3;
+    this.context_pac = context;
 	this.draw = function(){
-		context_pac.fillStyle = this.color;
-		context_pac.strokeStyle = this.color;
-		context_pac.beginPath();
-		context_pac.arc(this.posX, this.posY,this.radious, 0.2 * Math.PI, 1.8 * Math.PI);
+		this.context_pac.fillStyle = this.color;
+		this.context_pac.strokeStyle = this.color;
+		this.context_pac.beginPath();
+		this.context_pac.arc(this.posX, this.posY,this.radious, 0.2 * Math.PI, 1.8 * Math.PI);
 		// open mouth
-		context_pac.lineTo(this.posX, this.posY);
-		context_pac.closePath();
-		context_pac.fill();
-
+		this.context_pac.lineTo(this.posX, this.posY);
+		this.context_pac.closePath();
+		this.context_pac.fill();
 	}
 	this.move = function(){
 		this.posX += this.speedX;
@@ -160,10 +119,90 @@ function pacman(id,posX,posY,color){
 		}
 	}
 }
+
+function getPac(id) {
+  for(x in pac) {
+   	if(pac[x].id === id)
+      return pac[x];
+  }
+}
+function drawAll(){
+    makeGameArea2(ctx);
+    for(x in pac) {
+	    ctx.save();
+        pac[x].draw();
+    }
+
+}
+function checkCollision (obj,spX,spY){
+
+    var futuraposX = obj.posX + spX;
+    var futuraposY = obj.posY + spY;
+    //Con esta función extraigo el color del pixel que quiero del canvas
+    var x = futuraposX;
+    var y = futuraposY;
+    console.log(futuraposX,futuraposY);
+    var data = imageData.data;
+    var components = [
+        data[ ( y * imageData.width + x ) * 4 + 0],
+        data[ ( y * imageData.width + x ) * 4 + 1],
+        data[ ( y * imageData.width + x ) * 4 + 2],
+        data[ ( y * imageData.width + x ) * 4 + 3]
+    ];
+    console.log(components);
+
+}
+function keyHandler(event){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  //imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+   p1=getPac("p1");
+
+	switch(event.keyCode) {
+        case 65:
+			//console.log("izquierda");
+            p1.speedX = -1;
+            p1.speedY = 0;
+            p1.move();
+            drawAll();
+
+		break;
+		case 68:
+         //console.log("derecha");
+            p1.speedX = 1;
+            p1.speedY = 0;
+            checkCollision(p1,p1.speedX,p1.speedY);
+            p1.move();
+            drawAll();
+
+        break;
+        case 87:
+        //abajo
+            p1.speedX = 0;
+            p1.speedY = -1;
+            p1.move();
+            drawAll();
+
+        break;
+        case 83:
+            //arriba
+            p1.speedX = 0;
+            p1.speedY = 1;
+            p1.move();
+            drawAll();
+
+	default:
+	console.log("Key not handled");
+	}
+}
 function startGame(){
 	canvas = document.getElementById('canvas');
 	ctx = canvas.getContext('2d');
-	makeGameArea2();
-	//comecocos();
-    //pinta(canvas,ctx);
+	makeGameArea2(ctx);
+    imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    pac.push(new pacman("p1",25,73,"yellow",ctx));
+    pac[0].draw();
+
+    document.addEventListener('keydown', keyHandler, false);
+
 }
