@@ -4,6 +4,9 @@
 var walls = [];
 var pac = [];
 
+var elemDestino;
+
+
 
 function buildWall2(context,x,y,width,height){
 	context.fillRect(x,y,width,height);
@@ -177,6 +180,51 @@ function checkCollision (obj,spX,spY){
 	return false;
 
 }
+function comenzandoArrastrar(e){
+	var elemento = e.target;//con esta propiedad se puede identificar el objeto
+	e.dataTransfer.setData("Text",elemento.getAttribute("id"));  //comparte el id con la zona de destino
+	console.log("Estoy arrastrando");
+
+}
+function soltado(e){
+	//reseteamos comportamiento del navegador
+	console.log("Estoy soltando");
+	obj = getPac("p1");
+
+	e.preventDefault();
+	var id = e.dataTransfer.getData("Text");
+	console.log(id);
+	//con esto meto código html
+	var src = document.getElementById(id).src;
+	if (id == "comeAmarillo"){
+		obj.color = "yellow";
+		drawAll();
+	}else if(id == "comeAzul") {
+		obj.color = "Blue";
+		drawAll();
+	}else if (id == "comeVerde") {
+		obj.color = "green";
+		drawAll();
+	}
+	//ESta parte no consigo que funcione
+	elemDestino.innerHtml="<img src='" + src +"'>";
+}
+function cambiarColorPacman(event){
+	console.log("he entardo en cambiar color");
+
+	var images=document.querySelectorAll("#coloresPacman img");
+	console.log(images);
+	for(x=0; x < images.length; x++){
+		images[x].addEventListener("dragstart",comenzandoArrastrar,false)
+	}
+	elemDestino = document.getElementById("zonaDestino");
+	elemDestino.addEventListener("dragenter",function(e){
+		e.preventDefault();},false);
+	elemDestino.addEventListener("dragover",function(e){
+		e.preventDefault();},false);
+	elemDestino.addEventListener("drop",soltado,false);
+}
+
 function keyHandler(event){
   ctx.clearRect(0,0,canvas.width,canvas.height);
   //imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
@@ -187,10 +235,10 @@ function keyHandler(event){
 	switch(event.keyCode) {
         case 65:
 			//console.log("izquierda");
-			speedX = -2;
+			speedX = -5;
             speedY = 0;
             if (checkCollision(p1,speedX,speedY) == false){
-				p1.speedX = -2;
+				p1.speedX = -5;
 	            p1.speedY = 0;
             	p1.move();
 			}
@@ -199,10 +247,10 @@ function keyHandler(event){
 		break;
 		case 68:
          //console.log("derecha");
-            speedX = 2;
+            speedX = 5;
             speedY = 0;
             if (checkCollision(p1,speedX,speedY) == false){
-				p1.speedX = 2;
+				p1.speedX = 5;
 	            p1.speedY = 0;
             	p1.move();
 			}
@@ -212,10 +260,10 @@ function keyHandler(event){
         case 87:
         //abajo
             speedX = 0;
-            speedY = -2;
+            speedY = -5;
 			if (checkCollision(p1,speedX,speedY) == false){
 				p1.speedX = 0;
-	            p1.speedY = -2;
+	            p1.speedY = -5;
             	p1.move();
 			}
             drawAll();
@@ -224,10 +272,10 @@ function keyHandler(event){
         case 83:
             //arriba
             speedX = 0;
-            speedY = 2;
+            speedY = 5;
             if (checkCollision(p1,speedX,speedY) == false){
 				p1.speedX = 0;
-	            p1.speedY = 2;
+	            p1.speedY = 5;
             	p1.move();
 			}
             drawAll();
@@ -247,3 +295,4 @@ function startGame(){
     document.addEventListener('keydown', keyHandler, false);
 
 }
+window.addEventListener("load",cambiarColorPacman,false);

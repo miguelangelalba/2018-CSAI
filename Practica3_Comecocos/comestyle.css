@@ -9,3 +9,16 @@ canvas {
     height: 390px;
     border: 1px solid #d3d3d3;;
 }
+#coloresPacman{
+    float:right;
+    width: 30px;
+    margin: 30px;
+    border: 1px solid;
+}
+#zonaDestino{
+    float:right;
+    width: 100;
+    margin: 30px;
+    border: 1px solid;
+
+}
