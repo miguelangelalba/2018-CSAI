@@ -132,63 +132,104 @@ function drawAll(){
 
 }
 function checkCollision (obj,spX,spY){
+	var futuraposX;
+	var futuraposY
+	var diametro = obj.radious * 2;
 
-    var futuraposX = obj.posX + spX + obj.radious;
-    var futuraposY = obj.posY + spY -obj.radious;
-    //Con esta función extraigo el color del pixel que quiero del canvas
-    var x = futuraposX;
-    var y = futuraposY;
+	if ( spX > 0){
+		futuraposX = obj.posX + spX + obj.radious;
+		//para poder teenr en cuenta la altura completa del pacman
+    	futuraposY = obj.posY - obj.radious;
+	}else if (spX < 0) {
+		futuraposX = obj.posX + spX - obj.radious;
+		futuraposY = obj.posY - obj.radious;
+	} else if (spY > 0){
+		futuraposX = obj.posX - obj.radious;
+		futuraposY = obj.posY + spY + obj.radious;
+	}else if (spY < 0) {
+		futuraposX = obj.posX - obj.radious;
+		futuraposY = obj.posY + spY - obj.radious;
+	}
+	//Con esta función extraigo el color del pixel que quiero del canvas
+	//Detecta el color del pixel pasandole las coordenadas
     console.log(futuraposX,futuraposY);
 	var data = imageData.data;
-	for (i = 0; i < obj.radious; i++){
+	for (i = 0; i < diametro; i++){
 		var components = [
-        	data[ ( y * imageData.width + x ) * 4 + 0],
-        	data[ ( y * imageData.width + x ) * 4 + 1],
-        	data[ ( y * imageData.width + x ) * 4 + 2],
-        	data[ ( y * imageData.width + x ) * 4 + 3]
+        	data[ ( futuraposY * imageData.width + futuraposX ) * 4 + 0],
+        	data[ ( futuraposY * imageData.width + futuraposX ) * 4 + 1],
+        	data[ ( futuraposY * imageData.width + futuraposX ) * 4 + 2],
+        	data[ ( futuraposY * imageData.width + futuraposX ) * 4 + 3]
     	];
-		y++;
-    	console.log(components,y);
+		if (spY != 0){
+			futuraposX++;
+		}
+		if (spX != 0){
+			futuraposY++;
+		}
+		console.log("imprimo esto " + components[2]);
+
+		if (components[2] == 255){
+			return true;
+		}
+    	console.log(components,futuraposY);
 	}
+	return false;
 
 }
 function keyHandler(event){
   ctx.clearRect(0,0,canvas.width,canvas.height);
   //imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-
-   p1=getPac("p1");
+	var speedX;
+	var speedY;
+   	p1=getPac("p1");
 
 	switch(event.keyCode) {
         case 65:
 			//console.log("izquierda");
-            p1.speedX = -1;
-            p1.speedY = 0;
-            p1.move();
+			speedX = -2;
+            speedY = 0;
+            if (checkCollision(p1,speedX,speedY) == false){
+				p1.speedX = -2;
+	            p1.speedY = 0;
+            	p1.move();
+			}
             drawAll();
 
 		break;
 		case 68:
          //console.log("derecha");
-            p1.speedX = 1;
-            p1.speedY = 0;
-            checkCollision(p1,p1.speedX,p1.speedY);
-            p1.move();
+            speedX = 2;
+            speedY = 0;
+            if (checkCollision(p1,speedX,speedY) == false){
+				p1.speedX = 2;
+	            p1.speedY = 0;
+            	p1.move();
+			}
             drawAll();
 
         break;
         case 87:
         //abajo
-            p1.speedX = 0;
-            p1.speedY = -1;
-            p1.move();
+            speedX = 0;
+            speedY = -2;
+			if (checkCollision(p1,speedX,speedY) == false){
+				p1.speedX = 0;
+	            p1.speedY = -2;
+            	p1.move();
+			}
             drawAll();
 
         break;
         case 83:
             //arriba
-            p1.speedX = 0;
-            p1.speedY = 1;
-            p1.move();
+            speedX = 0;
+            speedY = 2;
+            if (checkCollision(p1,speedX,speedY) == false){
+				p1.speedX = 0;
+	            p1.speedY = 2;
+            	p1.move();
+			}
             drawAll();
 
 	default:
