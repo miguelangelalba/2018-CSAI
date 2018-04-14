@@ -84,9 +84,6 @@ function makeGameArea2(context){
 
 }
 
-function draw(){
-
-}
 
 function pacman(id,posX,posY,color,context){
 	this.id = id;
@@ -136,20 +133,23 @@ function drawAll(){
 }
 function checkCollision (obj,spX,spY){
 
-    var futuraposX = obj.posX + spX;
-    var futuraposY = obj.posY + spY;
+    var futuraposX = obj.posX + spX + obj.radious;
+    var futuraposY = obj.posY + spY -obj.radious;
     //Con esta función extraigo el color del pixel que quiero del canvas
     var x = futuraposX;
     var y = futuraposY;
     console.log(futuraposX,futuraposY);
-    var data = imageData.data;
-    var components = [
-        data[ ( y * imageData.width + x ) * 4 + 0],
-        data[ ( y * imageData.width + x ) * 4 + 1],
-        data[ ( y * imageData.width + x ) * 4 + 2],
-        data[ ( y * imageData.width + x ) * 4 + 3]
-    ];
-    console.log(components);
+	var data = imageData.data;
+	for (i = 0; i < obj.radious; i++){
+		var components = [
+        	data[ ( y * imageData.width + x ) * 4 + 0],
+        	data[ ( y * imageData.width + x ) * 4 + 1],
+        	data[ ( y * imageData.width + x ) * 4 + 2],
+        	data[ ( y * imageData.width + x ) * 4 + 3]
+    	];
+		y++;
+    	console.log(components,y);
+	}
 
 }
 function keyHandler(event){
