@@ -9,6 +9,14 @@ canvas {
     height: 390px;
     border: 1px solid #d3d3d3;;
 }
+#time{
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+
+}
 #coloresPacman{
     float:right;
     width: 30px;

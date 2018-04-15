@@ -98,6 +98,8 @@ function pacman(id,posX,posY,color,context){
 	this.speedY = 0;
 	this.lives = 3;
     this.context_pac = context;
+	this.puntos = 0;
+	this.time = 60;
 	this.draw = function(){
 		this.context_pac.fillStyle = this.color;
 		this.context_pac.strokeStyle = this.color;
@@ -284,6 +286,12 @@ function keyHandler(event){
 	console.log("Key not handled");
 	}
 }
+function countdown(){
+	obj = getPac("p1");
+	obj.time -= 1;
+	document.getElementById('time').innerHTML = "Tiempo:" + obj.time;
+
+}
 function startGame(){
 	canvas = document.getElementById('canvas');
 	ctx = canvas.getContext('2d');
@@ -291,8 +299,9 @@ function startGame(){
     imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     pac.push(new pacman("p1",25,73,"yellow",ctx));
     pac[0].draw();
-
+	setInterval(countdown,1000);
     document.addEventListener('keydown', keyHandler, false);
 
 }
+//
 window.addEventListener("load",cambiarColorPacman,false);
