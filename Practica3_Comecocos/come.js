@@ -89,17 +89,19 @@ function makeGameArea2(context){
 
 
 function pacman(id,posX,posY,color,context){
+	var d = new Date();
 	this.id = id;
 	this.posX = posX;
 	this.posY = posY;
 	this.color	= color;
 	this.radious = 4;
-	this.speedX = 0;
-	this.speedY = 0;
+	this.speedX = 0; //(s/t)
+	this.speedY = 0;//(s/t)
 	this.lives = 3;
     this.context_pac = context;
 	this.puntos = 0;
-	this.time = 60;
+	this.time=d.getTime();
+	this.timeCd = 60;
 	this.draw = function(){
 		this.context_pac.fillStyle = this.color;
 		this.context_pac.strokeStyle = this.color;
@@ -111,8 +113,17 @@ function pacman(id,posX,posY,color,context){
 		this.context_pac.fill();
 	}
 	this.move = function(){
-		this.posX += this.speedX;
-		this.posY += this.speedY;
+		var tmNow = d.getTime();
+		var dt = tmNow - this.time;
+		this.time = d.getTime();
+		console.log("Velocidad"+this.speedX,this.speedY);
+		console.log("Posición"+ this.posX+ this.posY);
+		if (checkCollision(this.id,this.speedX,this.speedY) == false){
+			//this.speedX = this.speedX+1*(dt/1000);
+			//this.speedY = this.speedY+1*(dt/1000);
+			this.posX += this.speedX;
+			this.posY += this.speedY;
+		}
 
 		if(this.posX > (canvas.width + 20)){
 			this.posX = -5;
@@ -140,6 +151,7 @@ function checkCollision (obj,spX,spY){
 	var futuraposX;
 	var futuraposY
 	var diametro = obj.radious * 2;
+	console.log("Esto es lo que llega:" + obj,spX,spY);
 
 	if ( spX > 0){
 		futuraposX = obj.posX + spX + obj.radious;
@@ -154,10 +166,13 @@ function checkCollision (obj,spX,spY){
 	}else if (spY < 0) {
 		futuraposX = obj.posX - obj.radious;
 		futuraposY = obj.posY + spY - obj.radious;
+	}else{
+		return false;
 	}
 	//Con esta función extraigo el color del pixel que quiero del canvas
 	//Detecta el color del pixel pasandole las coordenadas
-    console.log(futuraposX,futuraposY);
+	console.log("posixiones x ey :"+ obj.posX,obj.posY);
+    console.log("Futuro" + futuraposX,futuraposY);
 	var data = imageData.data;
 	for (i = 0; i < diametro; i++){
 		var components = [
@@ -175,6 +190,9 @@ function checkCollision (obj,spX,spY){
 		console.log("imprimo esto " + components[2]);
 
 		if (components[2] == 255){
+			obj.speedX = 0;
+			obj.speedY = 0;
+			alert("Encuentro cosa");
 			return true;
 		}
     	console.log(components,futuraposY);
@@ -226,7 +244,15 @@ function cambiarColorPacman(event){
 		e.preventDefault();},false);
 	elemDestino.addEventListener("drop",soltado,false);
 }
+function render(){
+	ctx.clearRect(0,0,canvas.width,canvas.height);
 
+	obj = getPac("p1");
+	obj.move();
+
+	drawAll();
+	console.log("Estoy renderizando");
+}
 function keyHandler(event){
   ctx.clearRect(0,0,canvas.width,canvas.height);
   //imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
@@ -237,10 +263,10 @@ function keyHandler(event){
 	switch(event.keyCode) {
         case 65:
 			//console.log("izquierda");
-			speedX = -5;
+			speedX = -1;
             speedY = 0;
             if (checkCollision(p1,speedX,speedY) == false){
-				p1.speedX = -5;
+				p1.speedX = -1;
 	            p1.speedY = 0;
             	p1.move();
 			}
@@ -249,10 +275,10 @@ function keyHandler(event){
 		break;
 		case 68:
          //console.log("derecha");
-            speedX = 5;
+            speedX = 1;
             speedY = 0;
             if (checkCollision(p1,speedX,speedY) == false){
-				p1.speedX = 5;
+				p1.speedX = 1;
 	            p1.speedY = 0;
             	p1.move();
 			}
@@ -262,10 +288,10 @@ function keyHandler(event){
         case 87:
         //abajo
             speedX = 0;
-            speedY = -5;
+            speedY = -1;
 			if (checkCollision(p1,speedX,speedY) == false){
 				p1.speedX = 0;
-	            p1.speedY = -5;
+	            p1.speedY = -1;
             	p1.move();
 			}
             drawAll();
@@ -288,15 +314,15 @@ function keyHandler(event){
 }
 function countdown(){
 	obj = getPac("p1");
-	if (obj.time > 0){
-		obj.time -= 1;
-		document.getElementById('time').innerHTML = "Tiempo:" + obj.time;
+	if (obj.timeCd > 0){
+		obj.timeCd -= 1;
+		document.getElementById('time').innerHTML = "Tiempo:" + obj.timeCd;
 	}else{
 		clearInterval(myCountdown);
-
+		alert("Su tiempo ha terminado");
 	}
-
 }
+
 function inicioCountdown(){
 	myCountdown = setInterval(countdown,1000);
 }
@@ -320,6 +346,7 @@ function startGame(){
 	//myCountdown = setInterval(countdown,1000);
     document.addEventListener('keydown', keyHandler, false);
 
+	intervall = setInterval(render,80);
 }
 //
 window.addEventListener("load",cambiarColorPacman,false);
