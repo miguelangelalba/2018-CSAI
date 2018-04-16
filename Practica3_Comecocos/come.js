@@ -299,15 +299,15 @@ function countdown(){
 }
 function inicioCountdown(){
 	myCountdown = setInterval(countdown,1000);
-	document.getElementById("parar").disabled = false;
-	document.getElementById("continuar").disabled = true;
-
 }
-function pararCountdown(){
-	clearInterval(myCountdown);
-	document.getElementById("parar").disabled = true;
-	document.getElementById("continuar").disabled = false;
-
+function pararContinuar(){
+	if (document.getElementById("pararContinuar").value == "parar"){
+		clearInterval(myCountdown);
+		document.getElementById("pararContinuar").value = "continuar";
+	}else if (document.getElementById("pararContinuar").value == "continuar"){
+		inicioCountdown();
+		document.getElementById("pararContinuar").value = "parar";
+	}
 }
 
 function startGame(){
