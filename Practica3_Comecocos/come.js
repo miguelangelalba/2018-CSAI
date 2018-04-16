@@ -288,10 +288,28 @@ function keyHandler(event){
 }
 function countdown(){
 	obj = getPac("p1");
-	obj.time -= 1;
-	document.getElementById('time').innerHTML = "Tiempo:" + obj.time;
+	if (obj.time > 0){
+		obj.time -= 1;
+		document.getElementById('time').innerHTML = "Tiempo:" + obj.time;
+	}else{
+		clearInterval(myCountdown);
+
+	}
 
 }
+function inicioCountdown(){
+	myCountdown = setInterval(countdown,1000);
+	document.getElementById("parar").disabled = false;
+	document.getElementById("continuar").disabled = true;
+
+}
+function pararCountdown(){
+	clearInterval(myCountdown);
+	document.getElementById("parar").disabled = true;
+	document.getElementById("continuar").disabled = false;
+
+}
+
 function startGame(){
 	canvas = document.getElementById('canvas');
 	ctx = canvas.getContext('2d');
@@ -299,7 +317,7 @@ function startGame(){
     imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     pac.push(new pacman("p1",25,73,"yellow",ctx));
     pac[0].draw();
-	setInterval(countdown,1000);
+	//myCountdown = setInterval(countdown,1000);
     document.addEventListener('keydown', keyHandler, false);
 
 }

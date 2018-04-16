@@ -7,8 +7,13 @@
 
 </head>
 
-<body onload="startGame()">
+<body onload="startGame();inicioCountdown();">
+
     <h2 id ="time"> Tiempo:60</h2>
+
+    <button id= "parar" onclick="pararCountdown();" >Stop</button>
+    <button id= "continuar" onclick="inicioCountdown();" disabled>Resume</button>
+
     <section id ="coloresPacman">
         <img id ="comeAmarillo"src="images/pacman_right.png">
         <img id ="comeAzul"src="images/pacman_blue_right.png">

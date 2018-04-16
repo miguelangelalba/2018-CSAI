@@ -23,6 +23,14 @@ canvas {
     margin: 30px;
     border: 1px solid;
 }
+button{
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+
+}
 #zonaDestino{
     float:right;
     width: 100;
