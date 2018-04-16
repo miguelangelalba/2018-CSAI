@@ -119,7 +119,7 @@ function pacman(id,posX,posY,color,context){
 		console.log("Velocidad"+this.speedX,this.speedY);
 		console.log("Posición"+ this.posX+ this.posY);
 		if (checkCollision(this.id,this.speedX,this.speedY) == false){
-			//this.speedX = this.speedX+1*(dt/1000);
+			this.speedX = this.speedX+1*(dt/1000);
 			//this.speedY = this.speedY+1*(dt/1000);
 			this.posX += this.speedX;
 			this.posY += this.speedY;
@@ -147,11 +147,13 @@ function drawAll(){
     }
 
 }
-function checkCollision (obj,spX,spY){
+function checkCollision (id,spX,spY){
+	obj=getPac(id)
 	var futuraposX;
 	var futuraposY
 	var diametro = obj.radious * 2;
 	console.log("Esto es lo que llega:" + obj,spX,spY);
+	console.log(obj);
 
 	if ( spX > 0){
 		futuraposX = obj.posX + spX + obj.radious;
@@ -192,7 +194,6 @@ function checkCollision (obj,spX,spY){
 		if (components[2] == 255){
 			obj.speedX = 0;
 			obj.speedY = 0;
-			alert("Encuentro cosa");
 			return true;
 		}
     	console.log(components,futuraposY);
@@ -263,10 +264,10 @@ function keyHandler(event){
 	switch(event.keyCode) {
         case 65:
 			//console.log("izquierda");
-			speedX = -1;
+			speedX = -3;
             speedY = 0;
-            if (checkCollision(p1,speedX,speedY) == false){
-				p1.speedX = -1;
+            if (checkCollision("p1",speedX,speedY) == false){
+				p1.speedX = -3;
 	            p1.speedY = 0;
             	p1.move();
 			}
@@ -275,10 +276,10 @@ function keyHandler(event){
 		break;
 		case 68:
          //console.log("derecha");
-            speedX = 1;
+            speedX = 3;
             speedY = 0;
-            if (checkCollision(p1,speedX,speedY) == false){
-				p1.speedX = 1;
+            if (checkCollision("p1",speedX,speedY) == false){
+				p1.speedX = 3;
 	            p1.speedY = 0;
             	p1.move();
 			}
@@ -288,10 +289,10 @@ function keyHandler(event){
         case 87:
         //abajo
             speedX = 0;
-            speedY = -1;
-			if (checkCollision(p1,speedX,speedY) == false){
+            speedY = -3;
+			if (checkCollision("p1",speedX,speedY) == false){
 				p1.speedX = 0;
-	            p1.speedY = -1;
+	            p1.speedY = -3;
             	p1.move();
 			}
             drawAll();
@@ -300,10 +301,10 @@ function keyHandler(event){
         case 83:
             //arriba
             speedX = 0;
-            speedY = 5;
-            if (checkCollision(p1,speedX,speedY) == false){
+            speedY = 3;
+            if (checkCollision("p1",speedX,speedY) == false){
 				p1.speedX = 0;
-	            p1.speedY = 5;
+	            p1.speedY = 3;
             	p1.move();
 			}
             drawAll();
