@@ -188,7 +188,7 @@ function checkCollisionBolas(){
         var DRadios= objPacman.radious+bolas[i].radious;
         if (Distancia < DRadios){
             objPacman.score = objPacman.score +10;
-            //document.getElementById("score").innerHTML = "Puntuación: "+score+" pts";
+            document.getElementById("score").innerHTML = "Puntuación: "+objPacman.score+" pts";
             bolas.splice(i,1);
         }
     }
