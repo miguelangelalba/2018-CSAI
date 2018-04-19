@@ -3,6 +3,7 @@
 
 var walls = [];
 var pac = [];
+var bolas = [];
 
 var elemDestino;
 
@@ -87,6 +88,31 @@ function makeGameArea2(context){
 
 }
 
+function makeBolas(ctx){
+
+    bolas.push(new bola("bgrande",20,21,4,"yellow",ctx));
+    bolas.push(new bola("bgrande",280,21,4,"yellow",ctx));
+    bolas.push(new bola("bgrande",20,130,4,"yellow",ctx));
+    bolas.push(new bola("bgrande",280,130,4,"yellow",ctx));
+
+}
+
+function bola(id,x,y,radious,color,context){
+    this.id = id;
+    this.radious = radious;
+    this.posX = x;
+    this.posY = y;
+    this.contextBalls = context;
+    this.color = color;
+    this.draw = function (){
+        this.contextBalls.fillStyle = this.color;
+		this.contextBalls.strokeStyle = this.color;
+        this.contextBalls.beginPath();
+        this.contextBalls.arc(this.posX, this.posY,this.radious, 0, (Math.PI/180)*360);
+        this.contextBalls.closePath();
+		this.contextBalls.fill();
+    }
+}
 
 function pacman(id,posX,posY,color,context){
 	var d = new Date();
@@ -99,7 +125,7 @@ function pacman(id,posX,posY,color,context){
 	this.speedY = 0;//(s/t)
 	this.lives = 3;
     this.context_pac = context;
-	this.puntos = 0;
+	this.score = 0;
 	this.time=d.getTime();
 	this.timeCd = 60;
 	this.draw = function(){
@@ -145,7 +171,27 @@ function drawAll(){
 	    ctx.save();
         pac[x].draw();
     }
+    checkCollisionBolas();
+    for (x in bolas){
+        ctx.save();
+        bolas[x].draw();
+    }
 
+}
+function checkCollisionBolas(){
+    objPacman=getPac("p1");
+
+    for (i in bolas){
+        var Numx=Math.pow(objPacman.posX-bolas[i].posX,2);
+		var Numy=Math.pow(objPacman.posY-bolas[i].posY,2);
+		var Distancia=Math.sqrt(Numx +Numy);
+        var DRadios= objPacman.radious+bolas[i].radious;
+        if (Distancia < DRadios){
+            objPacman.score = objPacman.score +10;
+            //document.getElementById("score").innerHTML = "Puntuación: "+score+" pts";
+            bolas.splice(i,1);
+        }
+    }
 }
 function checkCollision (id,spX,spY){
 	obj=getPac(id)
@@ -341,10 +387,12 @@ function startGame(){
 	canvas = document.getElementById('canvas');
 	ctx = canvas.getContext('2d');
 	makeGameArea2(ctx);
+    makeBolas(ctx);
     imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     pac.push(new pacman("p1",25,73,"yellow",ctx));
-    pac[0].draw();
-	//myCountdown = setInterval(countdown,1000);
+    drawAll();
+    //pac[0].draw();
+    //myCountdown = setInterval(countdown,1000);
     document.addEventListener('keydown', keyHandler, false);
 
 	intervall = setInterval(render,80);
