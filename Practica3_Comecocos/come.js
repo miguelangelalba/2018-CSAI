@@ -372,10 +372,13 @@ function countdown(){
 
 function inicioCountdown(){
 	myCountdown = setInterval(countdown,1000);
+	intervall = setInterval(render,80);
+
 }
 function pararContinuar(){
 	if (document.getElementById("pararContinuar").value == "parar"){
 		clearInterval(myCountdown);
+		clearInterval(intervall);
 		document.getElementById("pararContinuar").value = "continuar";
 	}else if (document.getElementById("pararContinuar").value == "continuar"){
 		inicioCountdown();
@@ -395,7 +398,7 @@ function startGame(){
     //myCountdown = setInterval(countdown,1000);
     document.addEventListener('keydown', keyHandler, false);
 
-	intervall = setInterval(render,80);
+	//intervall = setInterval(render,80);
 }
 //
 window.addEventListener("load",cambiarColorPacman,false);
