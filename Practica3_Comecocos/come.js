@@ -4,6 +4,7 @@
 var walls = [];
 var pac = [];
 var bolas = [];
+var fantasmas = [];
 
 var elemDestino;
 
@@ -113,6 +114,28 @@ function bola(id,x,y,radious,color,context){
 		this.contextBalls.fill();
     }
 }
+function fantasma(id,posX,posY,speedX,speedY,context,img){
+    var d = new Date();
+    this.image = new Image();
+
+	this.id = id;
+	this.posX = posX;
+	this.posY = posY;
+    this.width = 12;
+    this.height = 12;
+	this.radious = 4;
+	this.speedX = 0; //(s/t)
+	this.speedY = 0;//(s/t)
+	this.ctxFant = context;
+	this.score = 0;
+	this.time = d.getTime();
+	this.timeCd = 60;
+    this.image.src= img;
+    this.draw = function(){
+        this.ctxFant.drawImage(this.image,this.posX,this.posY, this.width, this.height);
+    }
+
+}
 
 function pacman(id,posX,posY,color,context){
 	var d = new Date();
@@ -175,6 +198,10 @@ function drawAll(){
     for (x in bolas){
         ctx.save();
         bolas[x].draw();
+    }
+    for (x in fantasmas){
+        ctx.save();
+        fantasmas[x].draw();
     }
 
 }
@@ -360,12 +387,13 @@ function keyHandler(event){
 	}
 }
 function countdown(){
-	obj = getPac("p1");
+	var obj = getPac("p1");
 	if (obj.timeCd > 0){
 		obj.timeCd -= 1;
 		document.getElementById('time').innerHTML = "Tiempo:" + obj.timeCd;
 	}else{
 		clearInterval(myCountdown);
+        changeMaxScore();
 		alert("Su tiempo ha terminado");
 	}
 }
@@ -385,14 +413,28 @@ function pararContinuar(){
 		document.getElementById("pararContinuar").value = "parar";
 	}
 }
-
+function changeMaxScore(){
+    var obj = getPac("p1");
+    if (obj.score > localStorage.maxScoreSotarage){
+        localStorage.maxScoreSotarage = obj.score;
+    }
+    document.getElementById("maxScore").innerHTML = "Puntuación Máxima: " + localStorage.maxScoreSotarage;
+}
+function showMaxScore(){
+    document.getElementById("maxScore").innerHTML = "Puntuación Máxima: " + localStorage.maxScoreSotarage;
+}
 function startGame(){
 	canvas = document.getElementById('canvas');
 	ctx = canvas.getContext('2d');
 	makeGameArea2(ctx);
     makeBolas(ctx);
+    if (localStorage.maxScoreSotarage === undefined){
+        localStorage.setItem("maxScoreSotarage", 0);
+    }
+    showMaxScore();
     imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     pac.push(new pacman("p1",25,73,"yellow",ctx));
+    fantasmas.push(new fantasma("f1",25,73,0,5,ctx,"images/rojo_right.png"));
     drawAll();
     //pac[0].draw();
     //myCountdown = setInterval(countdown,1000);
