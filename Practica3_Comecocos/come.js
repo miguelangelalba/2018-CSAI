@@ -96,6 +96,13 @@ function makeBolas(ctx){
     bolas.push(new bola("bgrande",20,130,4,"yellow",ctx));
     bolas.push(new bola("bgrande",280,130,4,"yellow",ctx));
 
+	//Bolas pequeñas
+	for (i = 80; i < 230; i+=10){
+
+		bolas.push(new bola("bpequeña",i,86,2,"yellow",ctx));
+
+
+	}
 }
 
 function bola(id,x,y,radious,color,context){
@@ -125,7 +132,7 @@ function fantasma(id,posX,posY,speedX,speedY,context,img){
     this.height = 12;
 	this.radious = 4;
 	this.speedX = 0; //(s/t)
-	this.speedY = 0;//(s/t)
+	this.speedY = 1;//(s/t)
 	this.ctxFant = context;
 	this.score = 0;
 	this.time = d.getTime();
@@ -134,6 +141,17 @@ function fantasma(id,posX,posY,speedX,speedY,context,img){
     this.draw = function(){
         this.ctxFant.drawImage(this.image,this.posX,this.posY, this.width, this.height);
     }
+	this.move = function(){
+		var tmNow = d.getTime();
+		var dt = tmNow - this.time;
+		this.time = d.getTime();
+		console.log("Velocidad"+this.speedX,this.speedY);
+		console.log("Posición"+ this.posX + this.posY);
+		//this.speedX = this.speedX+1*(dt/1000);
+		this.speedY = this.speedY+1*(dt/1000);
+		//this.posX += this.speedX;
+		this.posY += this.speedY;
+	}
 
 }
 
@@ -201,6 +219,7 @@ function drawAll(){
     }
     for (x in fantasmas){
         ctx.save();
+		fantasmas[x].move();
         fantasmas[x].draw();
     }
 
@@ -214,7 +233,12 @@ function checkCollisionBolas(){
 		var Distancia=Math.sqrt(Numx +Numy);
         var DRadios= objPacman.radious+bolas[i].radious;
         if (Distancia < DRadios){
-            objPacman.score = objPacman.score +10;
+			if (bolas[i].id == "bgrande"){
+            objPacman.score = objPacman.score + 3;
+		}else{
+			objPacman.score = objPacman.score + 1;
+
+		}
             document.getElementById("score").innerHTML = "Puntuación: "+objPacman.score+" pts";
             bolas.splice(i,1);
         }
