@@ -89,7 +89,7 @@ function makeGameArea2(context){
 
 }
 
-function makeBolas(ctx){
+function makebolas(ctx){
 
     bolas.push(new bola("bgrande",20,21,4,"yellow",ctx));
     bolas.push(new bola("bgrande",280,21,4,"yellow",ctx));
@@ -102,6 +102,9 @@ function makeBolas(ctx){
 		bolas.push(new bola("bpequeña",i,86,2,"yellow",ctx));
 	}
 	bolas.push(new bola("fruta",150,100,4,"orange",ctx));
+	//bolas.push(new fantasma("f1",25,73,0,5,ctx,"images/rojo_right.png"));
+	//console.log(bolas);
+
 }
 
 function bola(id,x,y,radious,color,context){
@@ -111,6 +114,7 @@ function bola(id,x,y,radious,color,context){
     this.posY = y;
     this.contextBalls = context;
     this.color = color;
+	//this.move = function(){return};
     this.draw = function (){
         this.contextBalls.fillStyle = this.color;
 		this.contextBalls.strokeStyle = this.color;
@@ -138,11 +142,15 @@ function fantasma(id,posX,posY,speedX,speedY,context,img){
     this.image.src= img;
     this.draw = function(){
         this.ctxFant.drawImage(this.image,this.posX,this.posY, this.width, this.height);
+		console.log("Estoy pintando fantama");
     }
 	this.move = function(){
 		var tmNow = d.getTime();
 		var dt = tmNow - this.time;
 		this.time = d.getTime();
+		if (checkCollisionColor(this.id,this.speedX,this.speedY) == true){
+			this.speedY = this.speedY * (-1);
+		}
 
 		//this.speedX = this.speedX+1*(dt/1000);
 		this.speedY = this.speedY+1*(dt/1000);
@@ -181,7 +189,7 @@ function pacman(id,posX,posY,color,context){
 		var dt = tmNow - this.time;
 		this.time = d.getTime();
 
-		if (checkCollision(this.id,this.speedX,this.speedY) == false){
+		if (checkCollisionColor(this.id,this.speedX,this.speedY) == false){
 			this.speedX = this.speedX+1*(dt/1000);
 			//this.speedY = this.speedY+1*(dt/1000);
 			this.posX += this.speedX;
@@ -215,6 +223,12 @@ function getPac(id) {
    	if(pac[x].id === id)
       return pac[x];
   }
+}
+function getFantasma(id){
+	for(x in fantasmas) {
+	   if(fantasmas[x].id === id)
+		return fantasmas[x];
+	}
 }
 function drawAll(){
 	if (bolas.length == 0){
@@ -265,8 +279,13 @@ function checkCollisionBolas(){
         }
     }
 }
-function checkCollision (id,spX,spY){
-	obj=getPac(id)
+function checkCollisionColor (id,spX,spY){
+	if (id == "p1" ){
+		obj=getPac(id);
+	}else {
+		obj=getFantasma(id);
+	}
+
 	var futuraposX;
 	var futuraposY
 	var diametro = obj.radious * 2;
@@ -305,8 +324,10 @@ function checkCollision (id,spX,spY){
 		}
 
 		if (components[2] == 255){
-			obj.speedX = 0;
-			obj.speedY = 0;
+			if(obj.id == "p1"){
+				obj.speedX = 0;
+				obj.speedY = 0;
+			}
 			return true;
 		}
 	}
@@ -372,7 +393,7 @@ function keyHandler(event){
 			//console.log("izquierda");
 			speedX = -3;
             speedY = 0;
-            if (checkCollision("p1",speedX,speedY) == false){
+            if (checkCollisionColor("p1",speedX,speedY) == false){
 				p1.speedX = -3;
 	            p1.speedY = 0;
             	p1.move();
@@ -384,7 +405,7 @@ function keyHandler(event){
          //console.log("derecha");
             speedX = 3;
             speedY = 0;
-            if (checkCollision("p1",speedX,speedY) == false){
+            if (checkCollisionColor("p1",speedX,speedY) == false){
 				p1.speedX = 3;
 	            p1.speedY = 0;
             	p1.move();
@@ -396,7 +417,7 @@ function keyHandler(event){
         //abajo
             speedX = 0;
             speedY = -3;
-			if (checkCollision("p1",speedX,speedY) == false){
+			if (checkCollisionColor("p1",speedX,speedY) == false){
 				p1.speedX = 0;
 	            p1.speedY = -3;
             	p1.move();
@@ -408,7 +429,7 @@ function keyHandler(event){
             //arriba
             speedX = 0;
             speedY = 3;
-            if (checkCollision("p1",speedX,speedY) == false){
+            if (checkCollisionColor("p1",speedX,speedY) == false){
 				p1.speedX = 0;
 	            p1.speedY = 3;
             	p1.move();
@@ -470,14 +491,14 @@ function startGame(){
 	canvas = document.getElementById('canvas');
 	ctx = canvas.getContext('2d');
 	makeGameArea2(ctx);
-    makeBolas(ctx);
+    makebolas(ctx);
     if (localStorage.maxScoreSotarage === undefined){
         localStorage.setItem("maxScoreSotarage", 0);
     }
     showMaxScore();
     imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     pac.push(new pacman("p1",25,73,"yellow",ctx));
-    fantasmas.push(new fantasma("f1",25,73,0,5,ctx,"images/rojo_right.png"));
+    fantasmas.push(new fantasma("f1",74,73,0,5,ctx,"images/rojo_right.png"));
     drawAll();
 
     document.addEventListener('keydown', keyHandler, false);
