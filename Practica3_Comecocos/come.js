@@ -100,9 +100,8 @@ function makeBolas(ctx){
 	for (i = 80; i < 230; i+=10){
 
 		bolas.push(new bola("bpequeña",i,86,2,"yellow",ctx));
-
-
 	}
+	bolas.push(new bola("fruta",150,100,4,"orange",ctx));
 }
 
 function bola(id,x,y,radious,color,context){
@@ -136,7 +135,6 @@ function fantasma(id,posX,posY,speedX,speedY,context,img){
 	this.ctxFant = context;
 	this.score = 0;
 	this.time = d.getTime();
-	this.timeCd = 60;
     this.image.src= img;
     this.draw = function(){
         this.ctxFant.drawImage(this.image,this.posX,this.posY, this.width, this.height);
@@ -145,8 +143,7 @@ function fantasma(id,posX,posY,speedX,speedY,context,img){
 		var tmNow = d.getTime();
 		var dt = tmNow - this.time;
 		this.time = d.getTime();
-		console.log("Velocidad"+this.speedX,this.speedY);
-		console.log("Posición"+ this.posX + this.posY);
+
 		//this.speedX = this.speedX+1*(dt/1000);
 		this.speedY = this.speedY+1*(dt/1000);
 		//this.posX += this.speedX;
@@ -183,8 +180,7 @@ function pacman(id,posX,posY,color,context){
 		var tmNow = d.getTime();
 		var dt = tmNow - this.time;
 		this.time = d.getTime();
-		console.log("Velocidad"+this.speedX,this.speedY);
-		console.log("Posición"+ this.posX+ this.posY);
+
 		if (checkCollision(this.id,this.speedX,this.speedY) == false){
 			this.speedX = this.speedX+1*(dt/1000);
 			//this.speedY = this.speedY+1*(dt/1000);
@@ -199,7 +195,19 @@ function pacman(id,posX,posY,color,context){
 		}
 	}
 }
-function playVideo(video){
+function fruta(){
+	bolas.push(new bola("naranja",280,130,4,"naranja",ctx));
+
+}
+function playVideo(source){
+	//playSound.pause();
+	mySong.pause();
+	canvas.setAttribute("style", "display:none");
+   	video = document.createElement("video");
+   	video.src = source;
+	video.setAttribute("preload", "auto");
+	document.body.appendChild(video);
+	video.play();
 
 }
 function getPac(id) {
@@ -209,6 +217,12 @@ function getPac(id) {
   }
 }
 function drawAll(){
+	if (bolas.length == 0){
+		clearInterval(myCountdown);
+		clearInterval(intervall);
+		playVideo("video/clap.mp4")
+	}
+
     makeGameArea2(ctx);
     for(x in pac) {
 	    ctx.save();
@@ -237,7 +251,12 @@ function checkCollisionBolas(){
         if (Distancia < DRadios){
 			if (bolas[i].id == "bgrande"){
             objPacman.score = objPacman.score + 3;
-		}else{
+		}else if (bolas[i].id == "fruta") {
+			document.getElementById("fruitSong").play();
+			objPacman.score = objPacman.score + 5;
+
+		}else {
+
 			objPacman.score = objPacman.score + 1;
 
 		}
@@ -251,8 +270,6 @@ function checkCollision (id,spX,spY){
 	var futuraposX;
 	var futuraposY
 	var diametro = obj.radious * 2;
-	console.log("Esto es lo que llega:" + obj,spX,spY);
-	console.log(obj);
 
 	if ( spX > 0){
 		futuraposX = obj.posX + spX + obj.radious;
@@ -272,8 +289,6 @@ function checkCollision (id,spX,spY){
 	}
 	//Con esta función extraigo el color del pixel que quiero del canvas
 	//Detecta el color del pixel pasandole las coordenadas
-	console.log("posixiones x ey :"+ obj.posX,obj.posY);
-    console.log("Futuro" + futuraposX,futuraposY);
 	var data = imageData.data;
 	for (i = 0; i < diametro; i++){
 		var components = [
@@ -288,14 +303,12 @@ function checkCollision (id,spX,spY){
 		if (spX != 0){
 			futuraposY++;
 		}
-		console.log("imprimo esto " + components[2]);
 
 		if (components[2] == 255){
 			obj.speedX = 0;
 			obj.speedY = 0;
 			return true;
 		}
-    	console.log(components,futuraposY);
 	}
 	return false;
 
@@ -303,17 +316,14 @@ function checkCollision (id,spX,spY){
 function comenzandoArrastrar(e){
 	var elemento = e.target;//con esta propiedad se puede identificar el objeto
 	e.dataTransfer.setData("Text",elemento.getAttribute("id"));  //comparte el id con la zona de destino
-	console.log("Estoy arrastrando");
 
 }
 function soltado(e){
 	//reseteamos comportamiento del navegador
-	console.log("Estoy soltando");
 	obj = getPac("p1");
 
 	e.preventDefault();
 	var id = e.dataTransfer.getData("Text");
-	console.log(id);
 	//con esto meto código html
 	var src = document.getElementById(id).src;
 	if (id == "comeAmarillo"){
@@ -330,10 +340,8 @@ function soltado(e){
 	elemDestino.innerHtml="<img src='" + src +"'>";
 }
 function cambiarColorPacman(event){
-	console.log("he entardo en cambiar color");
 
 	var images=document.querySelectorAll("#coloresPacman img");
-	console.log(images);
 	for(x=0; x < images.length; x++){
 		images[x].addEventListener("dragstart",comenzandoArrastrar,false)
 	}
@@ -351,7 +359,6 @@ function render(){
 	obj.move();
 
 	drawAll();
-	console.log("Estoy renderizando");
 }
 function keyHandler(event){
   ctx.clearRect(0,0,canvas.width,canvas.height);
@@ -409,7 +416,6 @@ function keyHandler(event){
             drawAll();
 
 	default:
-	console.log("Key not handled");
 	}
 }
 function countdown(){
@@ -420,7 +426,10 @@ function countdown(){
 	}else{
 		clearInterval(myCountdown);
         changeMaxScore();
-		alert("Su tiempo ha terminado");
+		clearInterval(myCountdown);
+		clearInterval(intervall);
+		playVideo("video/GameOver.mp4")
+		//alert("Su tiempo ha terminado");
 	}
 }
 
@@ -449,9 +458,15 @@ function changeMaxScore(){
 function showMaxScore(){
     document.getElementById("maxScore").innerHTML = "Puntuación Máxima: " + localStorage.maxScoreSotarage;
 }
+
+
 function startGame(){
-	document.getElementById("mySong").loop = true;
-	document.getElementById("mySong").play();
+	mysong = document.getElementById("mySong");
+	mySong.loop = true;
+	mySong.play();
+
+	// playVideo("video/GameOver.mp4")
+
 	canvas = document.getElementById('canvas');
 	ctx = canvas.getContext('2d');
 	makeGameArea2(ctx);
@@ -464,8 +479,7 @@ function startGame(){
     pac.push(new pacman("p1",25,73,"yellow",ctx));
     fantasmas.push(new fantasma("f1",25,73,0,5,ctx,"images/rojo_right.png"));
     drawAll();
-    //pac[0].draw();
-    //myCountdown = setInterval(countdown,1000);
+
     document.addEventListener('keydown', keyHandler, false);
 
 	//intervall = setInterval(render,80);
