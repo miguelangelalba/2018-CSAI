@@ -60,8 +60,8 @@ function makeGameArea2(context){
 
 	buildWall2(context_walls,30,119,8,6);
 	buildWall2(context_walls,260,119,8,6);
-	buildWall2(context_walls,80,40,8,8);
-	buildWall2(context_walls,210,40,8,8);
+	//buildWall2(context_walls,80,40,8,8);
+	//buildWall2(context_walls,210,40,8,8);
 
 	//Punto centro
 	buildWall2(context_walls,110,50,8,8);
@@ -102,9 +102,11 @@ function makebolas(ctx){
 		bolas.push(new bola("bpequeña",i,86,2,"yellow",ctx));
 	}
 	bolas.push(new bola("fruta",150,100,4,"orange",ctx));
-	//bolas.push(new fantasma("f1",25,73,0,5,ctx,"images/rojo_right.png"));
-	//console.log(bolas);
+}
 
+function makeFantasmas(){
+	fantasmas.push(new fantasma("f1",74,73,0,2,ctx,"images/rojo_right.png"));
+	fantasmas.push(new fantasma("f2",260,73,0,2,ctx,"images/naranja_left.png"));
 }
 
 function bola(id,x,y,radious,color,context){
@@ -133,9 +135,9 @@ function fantasma(id,posX,posY,speedX,speedY,context,img){
 	this.posY = posY;
     this.width = 12;
     this.height = 12;
-	this.radious = 4;
-	this.speedX = 0; //(s/t)
-	this.speedY = 1;//(s/t)
+	this.radious = 6;
+	this.speedX = speedX; //(s/t)
+	this.speedY = speedY;//(s/t)
 	this.ctxFant = context;
 	this.score = 0;
 	this.time = d.getTime();
@@ -247,6 +249,7 @@ function drawAll(){
         ctx.save();
         bolas[x].draw();
     }
+	checkCollisionFantasmas();
     for (x in fantasmas){
         ctx.save();
 		fantasmas[x].move();
@@ -254,6 +257,29 @@ function drawAll(){
     }
 
 }
+function checkCollisionFantasmas(){
+	objPacman=getPac("p1");
+
+    for (i in fantasmas){
+        var Numx=Math.pow(objPacman.posX-fantasmas[i].posX,2);
+		var Numy=Math.pow(objPacman.posY-fantasmas[i].posY,2);
+		var Distancia=Math.sqrt(Numx +Numy);
+        var DRadios= objPacman.radious+fantasmas[i].radious;
+        if (Distancia < DRadios){
+			objPacman.speedX = 0;
+			objPacman.speedY = 0;
+			objPacman.posX = 25;
+			objPacman.posY = 73;
+			objPacman.lives -= 1;
+			document.getElementById("lives").innerHTML = "Vidas: "+objPacman.lives;
+			if (objPacman.lives == 0 ){
+				playVideo("video/GameOver.mp4")
+			}
+        }
+    }
+}
+
+
 function checkCollisionBolas(){
     objPacman=getPac("p1");
 
@@ -449,7 +475,7 @@ function countdown(){
         changeMaxScore();
 		clearInterval(myCountdown);
 		clearInterval(intervall);
-		playVideo("video/GameOver.mp4")
+		playVideo("video/GameOver.mp4");
 		//alert("Su tiempo ha terminado");
 	}
 }
@@ -498,7 +524,7 @@ function startGame(){
     showMaxScore();
     imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     pac.push(new pacman("p1",25,73,"yellow",ctx));
-    fantasmas.push(new fantasma("f1",74,73,0,5,ctx,"images/rojo_right.png"));
+	makeFantasmas();
     drawAll();
 
     document.addEventListener('keydown', keyHandler, false);
