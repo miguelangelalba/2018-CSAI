@@ -448,6 +448,8 @@ function showMaxScore(){
     document.getElementById("maxScore").innerHTML = "Puntuación Máxima: " + localStorage.maxScoreSotarage;
 }
 function startGame(){
+	document.getElementById("mySong").loop = true; 
+	document.getElementById("mySong").play();
 	canvas = document.getElementById('canvas');
 	ctx = canvas.getContext('2d');
 	makeGameArea2(ctx);
