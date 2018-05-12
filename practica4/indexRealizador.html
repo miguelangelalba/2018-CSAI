@@ -1,0 +1,50 @@
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Realizador de Video </title>
+    <script src="realizador.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="realizadorStyle.css">
+
+</head>
+
+<body onload="startRealizador()"">
+    <table >
+        <tr>
+            <h2 id="time"> Tiempo de reproducción:</h2>
+
+            <video id ="directo"></video>
+        </tr>
+        <tr>
+            <th>
+                <input id="timeStart"></input>
+            </th>
+            <th>
+                <button id= "bucle" onclick="videoBucle()" >Rango en segundos bucle</button>
+            </th>
+            <th>
+                <input id="timeStop"></input>
+            </th>
+
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <th>
+                <video id = "camara1" src = "videos/video1.mp4" onclick="playVideo(src,id,currentTime,duration)" onMouseenter = "ponerSonido(id)" onMouseleave="quitarSonido(id)" ></video>
+            </th>
+            <th>
+                <video id = "camara2" src = "videos/video2.mp4" onclick="playVideo(src,id,currentTime,duration)" onMouseenter = "ponerSonido(id)" onMouseleave="quitarSonido(id)" ></video>
+            </th>
+            <th>
+                <video id = "camara3" src = "videos/video3.mp4" onclick="playVideo(src,id,currentTime,duration)" onMouseenter = "ponerSonido(id)" onMouseleave="quitarSonido(id)" ></video>
+            </th>
+            <th>
+                <video id = "camara4" src = "videos/video4.mp4" onclick="playVideo(src,id,currentTime,duration)" onMouseenter = "ponerSonido(id)" onMouseleave="quitarSonido(id)" ></video>
+            </th>
+        </tr>
+    </table>
+
+
+</body>
+</html>
