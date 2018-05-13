@@ -1,3 +1,31 @@
+function chroma(video,w,h){
+    var image = new Image();
+    image.src = "images/fondo.jpg";
+    ctx.drawImage(image,0,0,w,h);
+    var imagedata = ctx.getImageData(0,0,w,h);
+    var idata = imagedata.data;
+
+    ctx.drawImage(video,0,0,w,h);
+    var videodata = ctx.getImageData(0,0,w,h);
+    var vdata = videodata.data;
+
+    for(var i = 0; i < vdata.length; i+=4) {
+
+        var r = vdata[i];
+        var g = vdata[i+1];
+        var b = vdata[i+2];
+
+         if (g > 100 && r < 80 && b < 80){
+             vdata[i] = idata[i];
+             vdata[i+1] = idata[i+1];
+             vdata[i+2] = idata[i+2];
+         }
+        ctx.putImageData(videodata,0,0);
+        setTimeout(function(){ chroma(video,w,h); }, 0);
+
+    }
+}
+
 function filtroColor (video,w,h,r,g,b) {
     ctx.drawImage(video,0,0,w,h);
     var idata = ctx.getImageData(0,0,w,h);
@@ -21,7 +49,7 @@ function filtroColor (video,w,h,r,g,b) {
     ctx.putImageData(idata,0,0);
     setTimeout(function(){ filtroColor(video,w,h,r,g,b); }, 0);
 
-};
+}
 
 
 function draw(video,w,h){
@@ -52,10 +80,16 @@ document.addEventListener('DOMContentLoaded', function(){
 
     videoOriginal = document.getElementById("videoOriginal");
 
+    ////imagen///
+    var image = new Image();
+    image.src = "images/fondo.jpg";
+    //canvas.width = videoOriginal.clientWidth;
+    //canvas.height = videoOriginal.clientHeight;
+
     videoOriginal.addEventListener("play",function(){
-        canvas.width = videoOriginal.clientWidth;
-        canvas.height = videoOriginal.clientHeight;
-        filtroColor(videoOriginal, videoOriginal.clientWidth,videoOriginal.clientHeight,100,255,100);
+
+        //filtroColor(videoOriginal, videoOriginal.clientWidth,videoOriginal.clientHeight,100,255,100);
+        chroma(videoOriginal, canvas.width,canvas.height)
         //draw(videoOriginal, videoOriginal.clientWidth,videoOriginal.clientHeight)
     },false);
 },false);
