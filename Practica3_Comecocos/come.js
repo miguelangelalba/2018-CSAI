@@ -512,8 +512,6 @@ function startGame(){
 	mySong.loop = true;
 	mySong.play();
 
-	// playVideo("video/GameOver.mp4")
-
 	canvas = document.getElementById('canvas');
 	ctx = canvas.getContext('2d');
 	makeGameArea2(ctx);
