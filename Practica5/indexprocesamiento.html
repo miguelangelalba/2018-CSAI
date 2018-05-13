@@ -15,6 +15,31 @@
         <th>
         <canvas id="canvasProcesado"></canvas>
     </th>
-    </table
+    </table>
+Pon a uno ualquiera de los colores, el video tendrá un filtro de ese color
+<br>
+    R: <input type='text' id = "red">
+    G: <input type='text' id = "green">
+    B: <input type='text' id = "blue">
+
+    <button id= "rgb" value="parar" onclick="configuracion('rgb');" >RGB</button>
+    <br>
+    <button id= "gris" value="parar" onclick="configuracion('gris');" >Grises</button>
+    <button id= "chroma" value="parar" onclick="configuracion('chroma');" >chroma</button>
+
+
+
+
+
+
+    <!--<form onsubmit="guardarFormulario()">
+        <input type='text' id = "red">
+        <input type='text' id = "green">
+        <input type='text' id = "blue">
+
+        <input id="boton"  type="submit" value ="RGB" onclick="configuracion('rgb')"></button>
+
+    </form>-->
+
 </body>
 </html>
