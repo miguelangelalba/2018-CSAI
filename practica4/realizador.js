@@ -55,6 +55,24 @@ function startCameras(){
         cameras[x].play();
     }
 }
+function numRepeticiones(){
+    var timeStart = document.getElementById("timeStart").value;
+    var timeStop = document.getElementById("timeStop").value;
+    if (timeStart == "" | timeStop ==""){
+        timeStart = 0;
+        timeStop = 60*1000;
+    }
+    var repeticiones = document.getElementById("repeticiones").value;
+    if(repeticiones == "" ){
+        repeticiones = 2;
+    }
+    dt = timeStop-timeStart;
+    repeticionesbucle = dt*repeticiones*1000;
+    setTimeout(function () {
+        live.pause();
+
+    }, repeticionesbucle);
+}
 function startRealizador(){
 
     live = document.getElementById("directo");
