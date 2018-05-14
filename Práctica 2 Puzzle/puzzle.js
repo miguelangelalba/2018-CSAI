@@ -229,7 +229,7 @@ function onPuzzleClick(event,puzz,izquierda,top){
     }
 }
 function rndPuzzle(puzzle,tablero){
-
+console.log("pinto tablero");
     var rndTablero = tablero.slice();
 
     var randomPos = 0;
@@ -270,6 +270,7 @@ function main(){
 var canvas = document.getElementById("canvas");
  ctx = canvas.getContext("2d");
 var imagere = new Image();
+console.log("he llegado");
 
 imagere.src = "Images/reloj.jpg";
 
